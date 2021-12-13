@@ -1,12 +1,15 @@
 package com.natali.cultickets.service.detailsService;
 
 import com.natali.cultickets.dto.UserDto;
+import com.natali.cultickets.model.AuthInfo;
 import com.natali.cultickets.model.Role;
 //import com.natali.cultickets.service.impl.UserServiceImpl;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 //import javax.transaction.Transactional;
+import com.natali.cultickets.repository.UserRepository;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -18,15 +21,15 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-//    @Autowired
-//    private UserServiceImpl userService;
+    @Autowired
+    private UserRepository userRepository;
 
+    @SneakyThrows
     @Override
-//    @Transactional
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        UserDto user = new UserDto();
-//        UserDto user = this.userService.findUserDtoByEmail(email).orElseThrow(() -> new UsernameNotFoundException("Cannot find user with provided username"));
-        List<GrantedAuthority> authorities = getUserAuthority(user.getRoles());
+    public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
+        AuthInfo user = this.userRepository.findUserByLogin(login);
+
+        List<GrantedAuthority> authorities = getUserAuthority(this.userRepository.getRoles(user.getUserId()));
 
         return buildUserForAuthentication(user, authorities);
     }
@@ -37,9 +40,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 .collect(Collectors.toList());
     }
 
-    private UserDetails buildUserForAuthentication(UserDto user, List<GrantedAuthority> authorities) {
-        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(),
-                user.getActive(), true, true, true, authorities);
+    private UserDetails buildUserForAuthentication(AuthInfo user, List<GrantedAuthority> authorities) {
+        return new org.springframework.security.core.userdetails.User(user.getLogin(), user.getPasswordHash(),
+                true, true, true, true, authorities);
     }
 
 

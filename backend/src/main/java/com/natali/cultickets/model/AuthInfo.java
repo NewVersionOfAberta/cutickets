@@ -4,7 +4,9 @@ import lombok.Data;
 
 @Data
 public class AuthInfo {
-    String login;
-    String passwordHash;
-    String salt;
+    private int id;
+    private int userId;
+    private String login;
+    private String passwordHash;
+    private String salt;
 }

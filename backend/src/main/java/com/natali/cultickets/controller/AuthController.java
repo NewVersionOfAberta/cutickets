@@ -44,9 +44,9 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<Map<String, Object>> login(@RequestBody UserLoginDto user) {
         Map<String, Object> response = new HashMap<>();
-        String email = user.getEmail();
+        String login = user.getLogin();
         String password = user.getPassword();
-        this.authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
+        this.authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(login, password));
 //        this.userService.findUserDtoByEmail(email).ifPresent((u) -> {
 //            String jwtToken = this.jwtTokenUtil.generateToken(u);
 //            response.put("token", jwtToken);
