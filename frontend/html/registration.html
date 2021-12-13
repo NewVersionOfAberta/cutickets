@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cultickets</title>
+   
+</head>
+
+<body>
+<div id="content" class="content">
+    <form method="POST" action="/register" modelAttribute="user" class="form-signin">
+        <h2 >Create your account</h2>
+            <input type="text" name="userName" placeholder="Username"
+                        autofocus="true"></input>
+            <input type="text" name="email"
+                        placeholder="Email"></input>
+            <input type="password" name="password" placeholder="Password"></input>
+            <input type="text" name="firstName"
+                        placeholder="First name"></input>
+            <input type="text" name="lastName"
+                        placeholder="Last name"></input>
+            <input type="submit" value="Submit"/> 
+    </form>
+</div>
+<script src="../js/index.js"></script>
+</body>
+</html>
