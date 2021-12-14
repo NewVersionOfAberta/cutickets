@@ -7,6 +7,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import { AuthPage } from "./pages/AuthPage";
 import { ShowPage } from "./pages/ShowPage";
 import { TicketsPage } from "./pages/TicketsPage";
+import { ScheduledShowPage } from "./pages/ScheduledShowPage";
 
 export const useRoutes = (isAuthentificated, roles) => {
   if (isAuthentificated) {
@@ -17,7 +18,10 @@ export const useRoutes = (isAuthentificated, roles) => {
           {/* <Route path="/create" exact>
             <CreateDeadlinePage />
           </Route> */}
-          <Route path="/show-details/:id" element={<TicketsPage />}></Route>
+          <Route
+            path="/scheduled-show/:id"
+            element={<ScheduledShowPage />}
+          ></Route>
           {/* <Navigate to={"/shows"} /> */}
         </Routes>
       );
@@ -27,9 +31,11 @@ export const useRoutes = (isAuthentificated, roles) => {
           <Route path="/shows" exact element={<ShowPage />}>
             {/* <DeadlinePage /> */}
           </Route>
-          <Route path="/create" exact>
-            {/* <CreateDeadlinePage /> */}
-          </Route>
+          <Route
+            path="/scheduled-show/:id"
+            element={<ScheduledShowPage />}
+          ></Route>
+          {/* <CreateDeadlinePage /> */}
           <Route path="/details/:id">{/* <DetailsPage /> */}</Route>
           {/* <Navigate to={"/deadlines"} /> */}
         </Routes>

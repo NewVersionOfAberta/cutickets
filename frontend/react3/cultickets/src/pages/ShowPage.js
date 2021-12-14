@@ -6,17 +6,22 @@ import { NavLink } from "react-router-dom";
 
 export const ShowPage = () => {
   const [shows, setShows] = useState([]);
-  const { token, userName } = useContext(AuthContext);
+  const { token, userId } = useContext(AuthContext);
   const { loading, request } = useHttp();
 
   const fetchShows = useCallback(async () => {
     try {
-      const fetched = await request("/shows/theater", "GET", null, {
-        Authorization: `user ${token}`,
-      });
+      const fetched = await request(
+        `/shows/userId=${userId}&theatreId=0&genreId=0`,
+        "GET",
+        null,
+        {
+          Authorization: `user ${token}`,
+        }
+      );
       setShows(fetched.shows);
     } catch (e) {}
-  }, [request, token, setShows]);
+  }, [request, token, setShows, userId]);
 
   useEffect(() => {
     fetchShows();
@@ -29,18 +34,18 @@ export const ShowPage = () => {
   // }
   return shows.map((e) => (
     <>
-      <div class="card">
-        <div class="card-header">
-          <div class="container">
-            <div class="row">
-              <span class="col">{e.name}</span>
+      <div key={e.id} className="card">
+        <div className="card-header">
+          <div className="container">
+            <div className="row">
+              <span className="col">{e.name}</span>
             </div>
           </div>
         </div>
       </div>
-      <div class="card-body">
-        <p class="card-text">{e.description}</p>
-        <NavLink to={`/show/${e.id}`}>Book</NavLink>
+      <div className="card-body">
+        <p className="card-text">{e.description}</p>
+        <NavLink to={`/scheduled-show/${e.id}`}>Book</NavLink>
       </div>
     </>
   ));

@@ -1,7 +1,6 @@
 package com.natali.cultickets.repository;
 
-import com.natali.cultickets.model.Role;
-import com.natali.cultickets.model.TicketState;
+import com.natali.cultickets.model.TicketStatus;
 import org.flywaydb.core.Flyway;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -17,10 +16,10 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 @SpringBootTest
 class TicketStateRepositoryTest {
     private final Flyway flyway;
-    private final TicketStateRepository ticketStateRepository;
+    private final TicketStatusRepository ticketStateRepository;
 
     @Autowired
-    TicketStateRepositoryTest(Flyway flyway, TicketStateRepository ticketStateRepository) {
+    TicketStateRepositoryTest(Flyway flyway, TicketStatusRepository ticketStateRepository) {
         this.flyway = flyway;
         this.ticketStateRepository = ticketStateRepository;
     }
@@ -35,9 +34,9 @@ class TicketStateRepositoryTest {
     void findByName_existsStateNames_present() {
         String soldStateName = "Sold", availableStateName = "Available", unavailableStateName = "Unavailable";
 
-        TicketState soldState = this.ticketStateRepository.findByName(soldStateName);
-        TicketState availableState = this.ticketStateRepository.findByName(soldStateName);
-        TicketState unavailableState = this.ticketStateRepository.findByName(soldStateName);
+        TicketStatus soldState = this.ticketStateRepository.findByName(soldStateName);
+        TicketStatus availableState = this.ticketStateRepository.findByName(soldStateName);
+        TicketStatus unavailableState = this.ticketStateRepository.findByName(soldStateName);
 
         assertNotNull(soldState);
         assertNotNull(availableState);
@@ -48,7 +47,7 @@ class TicketStateRepositoryTest {
     void findByName_wrongStateName_null() {
         String testStateName = "2Sold";
 
-        TicketState testState = this.ticketStateRepository.findByName(testStateName);
+        TicketStatus testState = this.ticketStateRepository.findByName(testStateName);
 
         assertNull(testState);
     }

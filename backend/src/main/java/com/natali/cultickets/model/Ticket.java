@@ -4,12 +4,18 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotEmpty;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class Ticket {
     private int id;
+    @NotEmpty(message = "*Please provide ticket price")
+    private int price;
+    @NotEmpty(message = "*Please provide a seat")
     private Seat seat;
+    @NotEmpty(message = "*Please provide a show")
     private Show show;
-    private TicketState ticketState;
+    private TicketStatus ticketStatus;
 }

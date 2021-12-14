@@ -4,9 +4,8 @@ import com.natali.cultickets.dto.ShowDto;
 import com.natali.cultickets.mapstruct.ShowMapper;
 import com.natali.cultickets.model.Show;
 import com.natali.cultickets.repository.ShowRepository;
+import com.natali.cultickets.service.GenreService;
 import com.natali.cultickets.service.ShowService;
-import com.natali.cultickets.service.ShowStateService;
-import com.natali.cultickets.service.ShowTypeService;
 import com.natali.cultickets.service.TheaterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,20 +19,15 @@ public class ShowServiceImpl implements ShowService {
     private final ShowRepository showRepository;
     private final ShowMapper showMapper;
     private final TheaterService theaterService;
-//    private final SchemeService schemeService;
-    private final ShowStateService showStateService;
-//    private final ShowTypeService showTypeService;
+    private final GenreService genreService;
 
     @Autowired
     public ShowServiceImpl(ShowRepository showRepository, ShowMapper showMapper, TheaterService theaterService,
-                           ShowStateService showStateService) {
+                           GenreService genreService) {
         this.showRepository = showRepository;
         this.showMapper = showMapper;
         this.theaterService = theaterService;
-//        this.schemeService = schemeService;
-
-        this.showStateService = showStateService;
-//        this.showTypeService = showTypeService;
+        this.genreService = genreService;
     }
 
 //    public void updateShow(ShowDto showDto) {
@@ -63,10 +57,14 @@ public class ShowServiceImpl implements ShowService {
 //    }
 
     @Override
-    public List<ShowDto> findShows(int theaterId, int showTypeId) {
-//        if (theaterId == 0 && showTypeId == 0) {
+    public List<ShowDto> findShows(int theaterId, int showTypeId, int userId) {
+        if (theaterId == 0 && showTypeId == 0 && userId == 0) {
             return getAllShows();
-//        }
+        }
+        else if(theaterId == 0 && showTypeId == 0) {
+            return findSuitableForUser(userId);
+        }
+        return null;
 //        else if (showTypeId == 0) {
 //            return getShowsByTheater(theaterId);
 //        } else if (theaterId == 0) {
@@ -87,6 +85,19 @@ public class ShowServiceImpl implements ShowService {
         List<Show> allShows = null;
         try {
             allShows = this.showRepository.findAll();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return allShows.stream()
+                .map(this.showMapper::showToShowDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ShowDto> findSuitableForUser(int id) {
+        List<Show> allShows = null;
+        try {
+            allShows = this.showRepository.findSuitableForUser(id);
         } catch (SQLException e) {
             e.printStackTrace();
         }

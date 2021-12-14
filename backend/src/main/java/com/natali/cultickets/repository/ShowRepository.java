@@ -2,6 +2,7 @@ package com.natali.cultickets.repository;
 
 import com.natali.cultickets.db.DataAccessConfig;
 import com.natali.cultickets.model.AgeRating;
+import com.natali.cultickets.model.Genre;
 import com.natali.cultickets.model.Show;
 import com.natali.cultickets.model.Theatre;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,9 +12,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Component
 public class ShowRepository {
@@ -46,6 +45,47 @@ public class ShowRepository {
             showList.add(show);
         }
         resultSet.close();
+        return showList;
+    }
+
+    public List<Show> findSuitableForUser(int id) throws SQLException {
+        Connection connection = config.getConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(
+                "call find_suitable_user_shows(?);");
+        preparedStatement.setInt(1, id);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        List<Show> showList = new ArrayList<>();
+
+        while (resultSet.next()) {
+            Show show = new Show();
+            Theatre theatre = new Theatre();
+            AgeRating ageRating = new AgeRating();
+            show.setId(resultSet.getInt("sh_id"));
+            show.setName(resultSet.getString("sh_name"));
+            show.setDescription(resultSet.getString("sh_description"));
+            ageRating.setName(resultSet.getString("ar_name"));
+            show.setAgeRating(ageRating);
+            theatre.setName(resultSet.getString("t_name"));
+            show.setTheatre(theatre);
+
+            PreparedStatement genreStatement = connection.prepareStatement(
+                    "call get_show_genres(?);");
+            genreStatement.setInt(1, show.getId());
+            ResultSet genreResultSet = genreStatement.executeQuery();
+            Set<Genre> genres = new HashSet<>();
+            while(genreResultSet.next()) {
+                Genre genre = new Genre();
+                genre.setId(genreResultSet.getInt("g_id"));
+                genre.setName(genreResultSet.getString("g_name"));
+                genres.add(genre);
+            }
+            genreResultSet.close();
+            genreStatement.close();
+            show.setGenre(genres);
+            showList.add(show);
+        }
+        resultSet.close();
+        preparedStatement.close();
         return showList;
     }
 

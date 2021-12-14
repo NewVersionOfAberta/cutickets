@@ -21,14 +21,14 @@ export const Navbar = () => {
   return (
     <Nav  className="nav nav-pills nav-justified" onSelect={(key) => setPreActive(key)}>
         <LinkContainer className={`nav-link ${isActive[0] ? "active" : ""}`} to="/create">
-           <NavItem eventKey={1}>Create</NavItem>
+           <NavItem eventkey={1}>Create</NavItem>
         </LinkContainer>
         <LinkContainer className={`nav-link ${isActive[1] ? "active" : ""}`} to="/shows">
-          <NavItem eventKey={2}>Shows</NavItem>
+          <NavItem eventkey={2}>Shows</NavItem>
         </LinkContainer>
       
         <LinkContainer className={`nav-link ${isActive[2] ? "active" : ""}`} to="/" onClick={logoutHandler}>
-          <NavItem eventKey={3}>Log out</NavItem>
+          <NavItem eventkey={3}>Log out</NavItem>
         </LinkContainer>
         
     </Nav>
