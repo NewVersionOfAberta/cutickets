@@ -3,10 +3,12 @@ package com.natali.cultickets.dto;
 import lombok.Data;
 
 @Data
-public class TheaterDto {
+public class TheatreDto {
     private int id;
     private String name;
     private String description;
-    private String address;
+    private int address_id;
     private CityDto city;
+    private RegionDto region;
+    private CountryDto country;
 }

@@ -10,7 +10,7 @@ import java.sql.SQLException;
 
 @Component
 public class DataAccessConfig {
-    public static final String DB_URL = "jdbc:mysql://localhost:3306/Cultickets";
+    public static final String DB_URL = "jdbc:mysql://localhost/Cultickets";
     public static final String DB_Driver = "com.mysql.cj.jdbc.Driver";
     @Getter
     private final Connection connection;

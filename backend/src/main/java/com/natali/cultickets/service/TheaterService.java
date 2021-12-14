@@ -1,12 +1,12 @@
 package com.natali.cultickets.service;
 
-import com.natali.cultickets.dto.TheaterDto;
-import com.natali.cultickets.model.Theater;
-import java.util.List;
+import com.natali.cultickets.dto.TheatreDto;
+import com.natali.cultickets.model.Theatre;
+
 import java.util.Optional;
 
 public interface TheaterService {
-    Optional<Theater> findTheater(int theaterId);
+    TheatreDto findTheater(int theaterId);
 
-    List<TheaterDto> findAll();
+//    List<TheaterDto> findAll();
 }

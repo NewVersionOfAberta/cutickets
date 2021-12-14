@@ -1,34 +1,36 @@
-import React, { useContext } from "react";
-import { NavLink } from "react-router-dom";
+import React, { useContext, useState } from "react";
+import { Button, Nav, NavDropdown, MenuItem, NavItem } from 'react-bootstrap';
+import { LinkContainer } from 'react-router-bootstrap';
 import { AuthContext } from "../context/AuthContext";
 
 export const Navbar = () => {
   // const history = useHistory();
   const auth = useContext(AuthContext);
-
+  const [isActive, setActive] = useState([false, false, false]);
   const logoutHandler = (event) => {
     auth.logout();
     // history.push("/");
   };
 
+  const setPreActive = (index) => {
+    let active = [false, false, false];
+    active[index - 1] = true;
+    setActive(active);
+  }
+
   return (
-    <nav>
-      <div className="nav-wrapper blue-grey darken-1">
-        <span className="brand-logo">Deadlines</span>
-        <ul id="nav-mobile" className="right hide-on-med-and-down">
-          <li>
-            <NavLink to="/create">Create</NavLink>
-          </li>
-          <li>
-            <NavLink to="/deadlines">Deadlines</NavLink>
-          </li>
-          <li>
-            <NavLink to="/" onClick={logoutHandler}>
-              Log out
-            </NavLink>
-          </li>
-        </ul>
-      </div>
-    </nav>
+    <Nav  className="nav nav-pills nav-justified" onSelect={(key) => setPreActive(key)}>
+        <LinkContainer className={`nav-link ${isActive[0] ? "active" : ""}`} to="/create">
+           <NavItem eventKey={1}>Create</NavItem>
+        </LinkContainer>
+        <LinkContainer className={`nav-link ${isActive[1] ? "active" : ""}`} to="/shows">
+          <NavItem eventKey={2}>Shows</NavItem>
+        </LinkContainer>
+      
+        <LinkContainer className={`nav-link ${isActive[2] ? "active" : ""}`} to="/" onClick={logoutHandler}>
+          <NavItem eventKey={3}>Log out</NavItem>
+        </LinkContainer>
+        
+    </Nav>
   );
 };

@@ -3,7 +3,9 @@ package com.natali.cultickets.controller;
 import com.natali.cultickets.dto.UserLoginDto;
 import com.natali.cultickets.dto.UserPostDto;
 import com.natali.cultickets.model.AuthInfo;
+import com.natali.cultickets.model.Theatre;
 import com.natali.cultickets.repository.BaseRepository;
+import com.natali.cultickets.repository.TheatreRepository;
 import com.natali.cultickets.security.jwt.JwtUtils;
 //import com.natali.cultickets.service.UserService;
 //import com.natali.cultickets.service.impl.UserServiceImpl;
@@ -11,6 +13,7 @@ import com.natali.cultickets.security.jwt.JwtUtils;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import com.natali.cultickets.service.detailsService.UserDetailsServiceImpl;
 import lombok.extern.slf4j.Slf4j;
@@ -35,15 +38,15 @@ public class AuthController {
     private final JwtUtils jwtTokenUtil;
 
     private final AuthenticationManager authenticationManager;
-    private final BaseRepository repository;
+    @Autowired
+    private TheatreRepository theatreRepository;
     @Autowired
     public AuthController(
 //            UserServiceImpl userService,
-            JwtUtils jwtTokenUtil, AuthenticationManager authenticationManager, BaseRepository repository) {
+            JwtUtils jwtTokenUtil, AuthenticationManager authenticationManager) {
 //        this.userService = userService;
         this.jwtTokenUtil = jwtTokenUtil;
         this.authenticationManager = authenticationManager;
-        this.repository = repository;
     }
 
     @PostMapping("/login")
@@ -78,12 +81,26 @@ public class AuthController {
     }
 
     @GetMapping("/natashka")
-    public ResponseEntity<String> nat() {
+    public ResponseEntity<Map<String, String>> nat() {
+//        TheatreRepository theatreRepository = new TheatreRepository();
+        Map<String, String> response = new HashMap<>();
+        Optional<Theatre> theatreOpt;
+        Theatre theatre;
         try {
-            repository.execute();
+            theatreOpt = theatreRepository.findById(1);
+            if (theatreOpt.isPresent()) {
+                theatre = theatreOpt.get();
+                response.put("theatre", "id=" + theatre.getId() +
+                        ", name=" + theatre.getName() +
+                        ", description=" + theatre.getDescription());
+            }
+            else {
+                response.put("null", "There is no theatre with id ");
+            }
         } catch (SQLException throwables) {
+            response.put("error", throwables.getMessage());
             throwables.printStackTrace();
         }
-        return new ResponseEntity<>("Hello, Katya", HttpStatus.CREATED);
+        return ResponseEntity.ok(response);
     }
 }
