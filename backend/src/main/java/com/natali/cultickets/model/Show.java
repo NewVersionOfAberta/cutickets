@@ -13,13 +13,16 @@ import java.sql.Date;
 @NoArgsConstructor
 public class Show {
     private int id;
+    @NotEmpty(message = "*Please provide the theatre for the show")
     private Theatre theatre;
-//    private ShowState showState;
-//    private ShowType showType;
-    @NotEmpty(message = "*Please provide a show name")
+    @NotEmpty(message = "*Please provide show genre")
+    private Genre genre;
+    @NotEmpty(message = "*Please provide show name")
     private String name;
-    @NotEmpty(message = "*Please provide a show description")
+    @NotEmpty(message = "*Please provide show description")
     private String description;
+    @NotEmpty(message = "*Please provide age rating for the show")
     private AgeRating ageRating;
+    @NotEmpty(message = "*Please provide show time")
     private Date datetime;
 }

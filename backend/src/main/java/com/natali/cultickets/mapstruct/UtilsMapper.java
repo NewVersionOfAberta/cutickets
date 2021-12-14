@@ -2,12 +2,10 @@ package com.natali.cultickets.mapstruct;
 
 import com.natali.cultickets.dto.CityDto;
 import com.natali.cultickets.dto.CountryDto;
-import com.natali.cultickets.dto.ShowStateDto;
-import com.natali.cultickets.dto.ShowTypeDto;
+import com.natali.cultickets.dto.GenreDto;
 import com.natali.cultickets.model.City;
 import com.natali.cultickets.model.Country;
-import com.natali.cultickets.model.ShowState;
-import com.natali.cultickets.model.ShowType;
+import com.natali.cultickets.model.Genre;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
@@ -16,8 +14,5 @@ public interface UtilsMapper {
 
     CountryDto countryToCountryDto(Country country);
 
-    ShowStateDto showStateToShowStateDto(ShowState showState);
-
-    ShowTypeDto showTypeToShowTypeDto(ShowType showType);
-
+    GenreDto genreToGenreDto(Genre genre);
 }

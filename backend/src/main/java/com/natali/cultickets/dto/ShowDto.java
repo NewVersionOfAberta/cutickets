@@ -13,9 +13,8 @@ import lombok.NoArgsConstructor;
 public class ShowDto {
     private int id;
     private TheatreDto theater;
-//    private SchemeDto scheme;
-//    private ShowStateDto showState;
-//    private ShowTypeDto showType;
+    private GenreDto genre;
+    private PriceSchemeDto priceScheme;
     private String name;
     private String description;
     private AgeRating ageRating;

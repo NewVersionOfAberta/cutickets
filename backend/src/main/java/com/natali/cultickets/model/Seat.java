@@ -15,5 +15,5 @@ public class Seat {
     private int row;
     @Min(value = 1, message = "Seats numbers have to start from 1.")
     private int number;
-    private Price price;
+    private int sectorId;
 }

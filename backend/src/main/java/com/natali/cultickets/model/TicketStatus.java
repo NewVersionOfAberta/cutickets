@@ -9,8 +9,8 @@ import javax.validation.constraints.NotEmpty;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ShowType {
+public class TicketStatus {
     private int id;
-    @NotEmpty(message = "*Please provide a show type name")
+    @NotEmpty(message = "*Please provide a ticket state name")
     private String name;
 }
