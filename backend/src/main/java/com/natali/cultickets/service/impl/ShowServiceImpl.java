@@ -57,10 +57,14 @@ public class ShowServiceImpl implements ShowService {
 //    }
 
     @Override
-    public List<ShowDto> findShows(int theaterId, int showTypeId) {
-//        if (theaterId == 0 && showTypeId == 0) {
+    public List<ShowDto> findShows(int theaterId, int showTypeId, int userId) {
+        if (theaterId == 0 && showTypeId == 0 && userId == 0) {
             return getAllShows();
-//        }
+        }
+        else if(theaterId == 0 && showTypeId == 0) {
+            return findSuitableForUser(userId);
+        }
+        return null;
 //        else if (showTypeId == 0) {
 //            return getShowsByTheater(theaterId);
 //        } else if (theaterId == 0) {
@@ -81,6 +85,19 @@ public class ShowServiceImpl implements ShowService {
         List<Show> allShows = null;
         try {
             allShows = this.showRepository.findAll();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return allShows.stream()
+                .map(this.showMapper::showToShowDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ShowDto> findSuitableForUser(int id) {
+        List<Show> allShows = null;
+        try {
+            allShows = this.showRepository.findSuitableForUser(id);
         } catch (SQLException e) {
             e.printStackTrace();
         }

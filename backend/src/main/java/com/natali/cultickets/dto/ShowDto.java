@@ -1,6 +1,7 @@
 package com.natali.cultickets.dto;
 
 import java.sql.Date;
+import java.util.Set;
 
 import com.natali.cultickets.model.AgeRating;
 import lombok.AllArgsConstructor;
@@ -12,8 +13,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ShowDto {
     private int id;
-    private TheatreDto theater;
-    private GenreDto genre;
+    private TheatreDto theatre;
+    private Set<GenreDto> genre;
     private PriceSchemeDto priceScheme;
     private String name;
     private String description;

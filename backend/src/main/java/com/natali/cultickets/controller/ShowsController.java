@@ -1,8 +1,16 @@
 package com.natali.cultickets.controller;
 
 //import com.natali.cultickets.service.impl.ShowServiceImpl;
+
 import java.util.HashMap;
-        import java.util.Map;
+import java.util.List;
+import java.util.Map;
+
+import com.natali.cultickets.dto.ShowDto;
+import com.natali.cultickets.service.GenreService;
+import com.natali.cultickets.service.ShowService;
+import com.natali.cultickets.service.TheaterService;
+import com.natali.cultickets.service.impl.ShowServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,18 +25,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class ShowsController {
 
-//    private final ShowService showService;
-//    private final ShowTypeService showTypeService;
-//    private final TheaterService theaterService;
+    private final ShowService showService;
+    private final GenreService genreService;
+    private final TheaterService theaterService;
 
     @Autowired
     public ShowsController(
-//            ShowServiceImpl showService,
-//                           ShowTypeService showTypeService, TheaterService theaterService
-)                           {
-//        this.showService = showService;
-//        this.showTypeService = showTypeService;
-//        this.theaterService = theaterService;
+            ShowServiceImpl showService,
+            GenreService genreService, TheaterService theaterService
+    ) {
+        this.showService = showService;
+        this.genreService = genreService;
+        this.theaterService = theaterService;
     }
 
     @GetMapping("/filters")
@@ -61,6 +69,22 @@ public class ShowsController {
             responseData.put("message", "Failed to get shows.");
             responseEntity = new ResponseEntity<>(responseData, HttpStatus.INTERNAL_SERVER_ERROR);
             log.error("Failed to get shows", e);
+        }
+        return responseEntity;
+    }
+
+    @GetMapping("/shows/{userId}")
+    ResponseEntity<Map<String, Object>> getSuitableShows(@PathVariable int userId) {
+        ResponseEntity<Map<String, Object>> responseEntity;
+        Map<String, Object> responseData = new HashMap<>();
+        try {
+            List<ShowDto> shows = this.showService.findShows(0, 0, userId);
+            responseData.put("shows", shows);
+            responseEntity = new ResponseEntity<>(responseData, HttpStatus.OK);
+        } catch (Exception e) {
+            responseData.put("message", "Failed to get suitable shows.");
+            responseEntity = new ResponseEntity<>(responseData, HttpStatus.INTERNAL_SERVER_ERROR);
+            log.error("Failed to get suitable shows", e);
         }
         return responseEntity;
     }

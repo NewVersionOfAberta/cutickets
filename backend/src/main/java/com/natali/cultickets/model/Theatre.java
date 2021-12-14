@@ -11,9 +11,9 @@ import javax.validation.constraints.NotEmpty;
 @NoArgsConstructor
 public class Theatre {
     private int id;
-    @NotEmpty(message = "*Please provide a theater name")
+    @NotEmpty(message = "*Please provide theater name")
     private String name;
-    @NotEmpty(message = "*Please provide a theater description")
+//    @NotEmpty(message = "*Please provide a theater description")
     private String description;
 //    @NotEmpty(message = "*Please provide a theater address")
     private int address_id;
