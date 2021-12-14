@@ -73,12 +73,14 @@ public class ShowsController {
         return responseEntity;
     }
 
-    @GetMapping("/shows/{userId}")
-    ResponseEntity<Map<String, Object>> getSuitableShows(@PathVariable int userId) {
+    @GetMapping("/userId={userId}&theatreId={theatreId}&genreId={genreId}")
+    ResponseEntity<Map<String, Object>> getShows(@PathVariable int userId,
+                                                 @PathVariable int theatreId,
+                                                 @PathVariable int genreId) {
         ResponseEntity<Map<String, Object>> responseEntity;
         Map<String, Object> responseData = new HashMap<>();
         try {
-            List<ShowDto> shows = this.showService.findShows(0, 0, userId);
+            List<ShowDto> shows = this.showService.findShows(theatreId, genreId, userId);
             responseData.put("shows", shows);
             responseEntity = new ResponseEntity<>(responseData, HttpStatus.OK);
         } catch (Exception e) {
