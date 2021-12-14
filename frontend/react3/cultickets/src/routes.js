@@ -1,5 +1,5 @@
 import React from "react";
-import { Switch, Route, Redirect } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 // import { DeadlinePage } from "./pages/DeadlinePage";
 // import { DetailsPage } from "./pages/DetailsPage";
 // import { RegistrationPage } from "./pages/RegistrationPage";
@@ -9,7 +9,7 @@ import { AuthPage } from "./pages/AuthPage";
 export const useRoutes = (isAuthentificated) => {
   if (isAuthentificated) {
     return (
-      <Switch>
+      <Routes>
         <Route path="/deadlines" exact>
           {/* <DeadlinePage /> */}
         </Route>
@@ -17,19 +17,19 @@ export const useRoutes = (isAuthentificated) => {
           {/* <CreateDeadlinePage /> */}
         </Route>
         <Route path="/details/:id">{/* <DetailsPage /> */}</Route>
-        <Redirect to={"/deadlines"} />
-      </Switch>
+        {/* <Navigate to={"/deadlines"} /> */}
+      </Routes>
     );
   }
   return (
-    <Switch>
+    <Routes>
       <Route path="/registration" exact>
         {/* <RegistrationPage /> */}
       </Route>
-      <Route path="/" exact>
-        <AuthPage />
+      <Route path="/" exact element={<AuthPage />}>
+        {/* <AuthPage /> */}
       </Route>
-      <Redirect to="/" />
-    </Switch>
+      {/* <Navigate to="/" /> */}
+    </Routes>
   );
 };

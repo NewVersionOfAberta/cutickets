@@ -4,7 +4,6 @@ import { useHttp } from "../hooks/http.hook";
 import { useMessage } from "../hooks/message.hook";
 import { Link } from "react-router-dom";
 import { Loader } from "../components/Loader";
-import "materialize-css";
 
 export const AuthPage = () => {
   const auth = useContext(AuthContext);

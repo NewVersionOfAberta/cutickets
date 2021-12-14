@@ -5,7 +5,6 @@ import React from "react";
 import { useAuth } from "./hooks/auth.hook";
 import { AuthContext } from "./context/AuthContext";
 import { Navbar } from "./components/Navbar";
-import "materialize-css";
 
 function App() {
   const { token, login, logout, userId, userName } = useAuth();
