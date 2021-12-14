@@ -1,6 +1,8 @@
 package com.natali.cultickets.security.jwt;
 
 import com.natali.cultickets.dto.UserDto;
+import com.natali.cultickets.model.AuthInfo;
+import com.natali.cultickets.service.detailsService.UserDetailsServiceImpl;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -52,11 +54,11 @@ public class JwtUtils implements Serializable {
         return expiration.before(new Date());
     }
 
-//    public String generateToken(UserDto userDetails) {
-////        List<GrantedAuthority> userAuthority = UserDetailsServiceImpl.getUserAuthority(userDetails.getRoles());
-//
-//        return doGenerateToken(userAuthority, userDetails.getEmail());
-//    }
+    public String generateToken(AuthInfo authInfo, List<GrantedAuthority> grantedAuthorities) {
+//        List<GrantedAuthority> userAuthority = UserDetailsServiceImpl.getUserAuthority(userDetails.getRoles());
+
+        return doGenerateToken(grantedAuthorities, authInfo.getLogin());
+    }
 
     private String doGenerateToken(List<GrantedAuthority> claims, String subject) {
         return Jwts.builder()

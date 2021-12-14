@@ -10,12 +10,15 @@ import com.natali.cultickets.security.jwt.JwtUtils;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
+
+import com.natali.cultickets.service.detailsService.UserDetailsServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,7 +29,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
 //    private final UserService userService;
-
+    @Autowired
+    private UserDetailsServiceImpl userDetailsService;
     private final JwtUtils jwtTokenUtil;
 
     private final AuthenticationManager authenticationManager;
@@ -47,11 +51,9 @@ public class AuthController {
         String login = user.getLogin();
         String password = user.getPassword();
         this.authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(login, password));
-//        this.userService.findUserDtoByEmail(email).ifPresent((u) -> {
-//            String jwtToken = this.jwtTokenUtil.generateToken(u);
-//            response.put("token", jwtToken);
-//            response.put("user", u);
-//        });
+        String jwtToken = this.jwtTokenUtil.generateToken(userDetailsService.getUser(), userDetailsService.getAuthorities());
+        response.put("token", jwtToken);
+//        response.put("user", userDetailsService.getUser());
         ResponseEntity<Map<String, Object>> responseEntity = ResponseEntity.ok(response);
         log.info("Response = {}", responseEntity);
         return responseEntity;

@@ -4,14 +4,14 @@ import { useHttp } from "../hooks/http.hook";
 import { useMessage } from "../hooks/message.hook";
 import { Link } from "react-router-dom";
 import { Loader } from "../components/Loader";
-import { client } from "../context/SocketContext";
+import "materialize-css";
 
 export const AuthPage = () => {
   const auth = useContext(AuthContext);
   const message = useMessage();
   const { loading, request, error, clearError } = useHttp();
   const [form, setForm] = useState({
-    email: "",
+    login: "",
     password: "",
   });
 
@@ -33,18 +33,11 @@ export const AuthPage = () => {
 
   const loginHandler = async () => {
     try {
-      await request({ type: "POST_LOGIN", ...form });
-      client.onmessage = (message) => {
-        const { data } = message;
-        const { token, userId, name } = JSON.parse(data);
-        console.log("In login onmessage", data);
-
-        //data = JSON.stringify(data);
-        console.log("Token", token, userId, name);
-        auth.login(token, userId, name);
-      };
+      console.log("Here");
+      const data = await request("/login", "POST", { ...form });
+      auth.login(data.token, data.userId, data.name);
     } catch (e) {
-      console.log("Error", e);
+      console.log(e);
     }
   };
 
@@ -55,7 +48,7 @@ export const AuthPage = () => {
   return (
     <div className="row">
       <div className="col s6 offset-s3">
-        <h1>Deadlines</h1>
+        <h1>Cultickets</h1>
         <div className="card blue-grey lighten-4">
           <div className="card-content white-text">
             <span className="card-title blue-grey-text darken-2">
@@ -63,10 +56,10 @@ export const AuthPage = () => {
             </span>
             <div className="input-field">
               <input
-                id="email"
+                id="login"
                 type="text"
-                name="email"
-                value={form.email}
+                name="login"
+                value={form.login}
                 onChange={changeHandler}
               />
               <label htmlFor="Email">Email</label>

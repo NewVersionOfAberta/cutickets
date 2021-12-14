@@ -11,15 +11,13 @@ export const useRoutes = (isAuthentificated) => {
     return (
       <Switch>
         <Route path="/deadlines" exact>
-          <AuthPage />
+          {/* <DeadlinePage /> */}
         </Route>
-        {/* <Route path="/create" exact>
-          <CreateDeadlinePage />
+        <Route path="/create" exact>
+          {/* <CreateDeadlinePage /> */}
         </Route>
-        <Route path="/details/:id">
-          <DetailsPage />
-        </Route>
-        <Redirect to={"/deadlines"} /> */}
+        <Route path="/details/:id">{/* <DetailsPage /> */}</Route>
+        <Redirect to={"/deadlines"} />
       </Switch>
     );
   }
@@ -29,7 +27,7 @@ export const useRoutes = (isAuthentificated) => {
         {/* <RegistrationPage /> */}
       </Route>
       <Route path="/" exact>
-        {/* <AuthPage /> */}
+        <AuthPage />
       </Route>
       <Redirect to="/" />
     </Switch>
