@@ -14,6 +14,10 @@ public interface ShowService {
     List<ShowDto> findShows(int theaterId, int typeId, int userId);
 
     List<ShowDto> findSuitableForUser(int id);
+
+    List<ShowDto> findScheduledShowsByShow(int showId);
+
+    ShowDto getShowInfo(int showId);
 //
 //    void deleteShow(ShowDto showDto);
 }

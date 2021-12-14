@@ -83,11 +83,11 @@ public class ShowServiceImpl implements ShowService {
 //
     public List<ShowDto> getAllShows() {
         List<Show> allShows = null;
-        try {
-            allShows = this.showRepository.findAll();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            allShows = this.showRepository.findAll();
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
         return allShows.stream()
                 .map(this.showMapper::showToShowDto)
                 .collect(Collectors.toList());
@@ -105,6 +105,32 @@ public class ShowServiceImpl implements ShowService {
                 .map(this.showMapper::showToShowDto)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<ShowDto> findScheduledShowsByShow(int showId) {
+        List<Show> allShows = null;
+        try {
+            allShows = this.showRepository.findScheduledShowsByShow(showId);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return allShows.stream()
+                .map(this.showMapper::showToShowDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public ShowDto getShowInfo(int showId) {
+        Show show = null;
+        try {
+            show = this.showRepository.getShowInfo(showId);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return showMapper.showToShowDto(show);
+    }
+
+
 //
 //    private List<ShowDto> getShowsByTheater(int theaterId) {
 //        Theater theater = this.theaterService.findTheater(theaterId)

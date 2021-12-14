@@ -90,4 +90,22 @@ public class ShowsController {
         return responseEntity;
     }
 
+    @GetMapping("/showId={showId}")
+    ResponseEntity<Map<String, Object>> getShows(@PathVariable int showId) {
+        ResponseEntity<Map<String, Object>> responseEntity;
+        Map<String, Object> responseData = new HashMap<>();
+        try {
+            ShowDto show = this.showService.getShowInfo(showId);
+            List<ShowDto> shows = this.showService.findScheduledShowsByShow(showId);
+            responseData.put("show", show);
+            responseData.put("scheduled_shows", shows);
+            responseEntity = new ResponseEntity<>(responseData, HttpStatus.OK);
+        } catch (Exception e) {
+            responseData.put("message", "Failed to get suitable shows.");
+            responseEntity = new ResponseEntity<>(responseData, HttpStatus.INTERNAL_SERVER_ERROR);
+            log.error("Failed to get suitable shows", e);
+        }
+        return responseEntity;
+    }
+
 }

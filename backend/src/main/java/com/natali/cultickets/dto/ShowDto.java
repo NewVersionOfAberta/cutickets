@@ -1,6 +1,7 @@
 package com.natali.cultickets.dto;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.Set;
 
 import com.natali.cultickets.model.AgeRating;
@@ -19,5 +20,5 @@ public class ShowDto {
     private String name;
     private String description;
     private AgeRating ageRating;
-    private Date datetime;
+    private Timestamp datetime;
 }
