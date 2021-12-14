@@ -54,13 +54,12 @@ public class ShowRepository {
                 "call find_suitable_user_shows(?);");
         preparedStatement.setInt(1, id);
         ResultSet resultSet = preparedStatement.executeQuery();
-        Show show = new Show();
-        Theatre theatre = new Theatre();
-        AgeRating ageRating = new AgeRating();
-        Genre genre = new Genre();
         List<Show> showList = new ArrayList<>();
 
         while (resultSet.next()) {
+            Show show = new Show();
+            Theatre theatre = new Theatre();
+            AgeRating ageRating = new AgeRating();
             show.setId(resultSet.getInt("sh_id"));
             show.setName(resultSet.getString("sh_name"));
             show.setDescription(resultSet.getString("sh_description"));
@@ -68,7 +67,6 @@ public class ShowRepository {
             show.setAgeRating(ageRating);
             theatre.setName(resultSet.getString("t_name"));
             show.setTheatre(theatre);
-            showList.add(show);
 
             PreparedStatement genreStatement = connection.prepareStatement(
                     "call get_show_genres(?);");
@@ -76,12 +74,18 @@ public class ShowRepository {
             ResultSet genreResultSet = genreStatement.executeQuery();
             Set<Genre> genres = new HashSet<>();
             while(genreResultSet.next()) {
+                Genre genre = new Genre();
+                genre.setId(genreResultSet.getInt("g_id"));
                 genre.setName(genreResultSet.getString("g_name"));
                 genres.add(genre);
             }
+            genreResultSet.close();
+            genreStatement.close();
             show.setGenre(genres);
+            showList.add(show);
         }
         resultSet.close();
+        preparedStatement.close();
         return showList;
     }
 
