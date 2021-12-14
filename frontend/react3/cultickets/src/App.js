@@ -7,9 +7,10 @@ import { AuthContext } from "./context/AuthContext";
 import { Navbar } from "./components/Navbar";
 
 function App() {
-  const { token, login, logout, userId, userName } = useAuth();
+  const { token, login, logout, userId, userName, roles } = useAuth();
+  console.log("From App", roles);
   const isAuthentificated = !!token;
-  const routes = useRoutes(isAuthentificated);
+  const routes = useRoutes(isAuthentificated, roles);
   return (
     <AuthContext.Provider
       value={{
@@ -19,6 +20,7 @@ function App() {
         userId,
         userName,
         isAuthentificated,
+        roles,
       }}
     >
       <Router>

@@ -34,15 +34,16 @@ export const AuthPage = () => {
     try {
       console.log("Here");
       const data = await request("/login", "POST", { ...form });
-      auth.login(data.token, data.userId, data.name);
+      console.log(data);
+      auth.login(data.token, data.user.userId, data.user.login, data.roles);
     } catch (e) {
       console.log(e);
     }
   };
 
-  if (loading) {
-    return <Loader />;
-  }
+  // if (loading) {
+  //   return <Loader />;
+  // }
 
   return (
     <div className="row">

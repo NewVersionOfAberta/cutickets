@@ -32,9 +32,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @SneakyThrows
     @Override
     public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
-        AuthInfo user = this.userRepository.findUserByLogin(login);
+        this.user = this.userRepository.findUserByLogin(login);
 
-        List<GrantedAuthority> authorities = getUserAuthority(this.userRepository.getRoles(user.getUserId()));
+        this.authorities = getUserAuthority(this.userRepository.getRoles(user.getUserId()));
 
         return buildUserForAuthentication();
     }

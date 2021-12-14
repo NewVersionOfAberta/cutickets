@@ -2,6 +2,7 @@ package com.natali.cultickets.controller;
 
 import com.natali.cultickets.dto.UserLoginDto;
 import com.natali.cultickets.dto.UserPostDto;
+import com.natali.cultickets.model.AuthInfo;
 import com.natali.cultickets.repository.BaseRepository;
 import com.natali.cultickets.security.jwt.JwtUtils;
 //import com.natali.cultickets.service.UserService;
@@ -51,9 +52,12 @@ public class AuthController {
         String login = user.getLogin();
         String password = user.getPassword();
         this.authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(login, password));
-        String jwtToken = this.jwtTokenUtil.generateToken(userDetailsService.getUser(), userDetailsService.getAuthorities());
+        AuthInfo authInfo = userDetailsService.getUser();
+        String jwtToken = this.jwtTokenUtil.generateToken(authInfo, userDetailsService.getAuthorities());
         response.put("token", jwtToken);
-//        response.put("user", userDetailsService.getUser());
+        authInfo.setPasswordHash("");
+        response.put("user", authInfo);
+        response.put("roles", userDetailsService.getAuthorities());
         ResponseEntity<Map<String, Object>> responseEntity = ResponseEntity.ok(response);
         log.info("Response = {}", responseEntity);
         return responseEntity;

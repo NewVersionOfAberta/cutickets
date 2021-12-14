@@ -6,20 +6,35 @@ import { Routes, Route, Navigate } from "react-router-dom";
 // import { CreateDeadlinePage } from "./pages/CreateDeadlinePage";
 import { AuthPage } from "./pages/AuthPage";
 
-export const useRoutes = (isAuthentificated) => {
+export const useRoutes = (isAuthentificated, roles) => {
   if (isAuthentificated) {
-    return (
-      <Routes>
-        <Route path="/deadlines" exact>
-          {/* <DeadlinePage /> */}
-        </Route>
-        <Route path="/create" exact>
-          {/* <CreateDeadlinePage /> */}
-        </Route>
-        <Route path="/details/:id">{/* <DetailsPage /> */}</Route>
-        {/* <Navigate to={"/deadlines"} /> */}
-      </Routes>
-    );
+    if (roles.map((value) => value.authority).includes("ADMIN")) {
+      return (
+        <Routes>
+          {/* <Route path="/deadlines" exact>
+            <DeadlinePage />
+          </Route>
+          <Route path="/create" exact>
+            <CreateDeadlinePage />
+          </Route> */}
+          <Route path="/details/:id">{/* <DetailsPage /> */}</Route>
+          {/* <Navigate to={"/deadlines"} /> */}
+        </Routes>
+      );
+    } else {
+      return (
+        <Routes>
+          <Route path="/deadlines" exact>
+            {/* <DeadlinePage /> */}
+          </Route>
+          <Route path="/create" exact>
+            {/* <CreateDeadlinePage /> */}
+          </Route>
+          <Route path="/details/:id">{/* <DetailsPage /> */}</Route>
+          {/* <Navigate to={"/deadlines"} /> */}
+        </Routes>
+      );
+    }
   }
   return (
     <Routes>

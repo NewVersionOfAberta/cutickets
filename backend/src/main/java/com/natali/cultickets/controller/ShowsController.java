@@ -7,6 +7,7 @@ import com.natali.cultickets.service.ShowService;
 import com.natali.cultickets.service.ShowTypeService;
 import com.natali.cultickets.service.TheaterService;
 //import com.natali.cultickets.service.impl.ShowServiceImpl;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -56,16 +57,18 @@ public class ShowsController {
         return responseEntity;
     }
 
-    @GetMapping("/theater/{theaterId}/type/{showTypeId}")
-    ResponseEntity<Map<String, Object>> getShows(@PathVariable int theaterId, @PathVariable int showTypeId) {
-        ResponseEntity<Map<String, Object>> responseEntity;
-        Map<String, Object> responseData = new HashMap<>();
+    @GetMapping("/theater")
+//    ResponseEntity<Map<String, List<ShowDto>>> getShows(@PathVariable int theaterId, @PathVariable int showTypeId) {
+    ResponseEntity<Map<String, List<ShowDto>>> getShows() {
+        ResponseEntity<Map<String, List<ShowDto>>> responseEntity;
+        Map<String, List<ShowDto>> responseData = new HashMap<>();
         try {
 //            List<ShowDto> shows = this.showService.findShows(theaterId, showTypeId);
-//            responseData.put("shows", shows);
+            List<ShowDto> shows = List.of(new ShowDto(1, "Theatre 1", "Good one", null),
+                    new ShowDto(2, "Theatre 2", "Good too", null));
+            responseData.put("shows", shows);
             responseEntity = new ResponseEntity<>(responseData, HttpStatus.OK);
         } catch (Exception e) {
-            responseData.put("message", "Failed to get shows.");
             responseEntity = new ResponseEntity<>(responseData, HttpStatus.INTERNAL_SERVER_ERROR);
             log.error("Failed to get shows", e);
         }
