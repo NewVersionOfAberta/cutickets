@@ -16,6 +16,9 @@ public class Ticket {
     @NotEmpty(message = "*Please provide a seat")
     private Seat seat;
     @NotEmpty(message = "*Please provide a show")
+    private TheaterHall theaterHall;
+    private Sector sector;
+    private Theatre theatre;
     private Show show;
     private TicketStatus ticketStatus;
 }
