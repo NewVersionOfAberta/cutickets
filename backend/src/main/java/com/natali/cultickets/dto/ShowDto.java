@@ -20,5 +20,5 @@ public class ShowDto {
     private String name;
     private String description;
     private AgeRating ageRating;
-    private Timestamp datetime;
+    private String datetime;
 }

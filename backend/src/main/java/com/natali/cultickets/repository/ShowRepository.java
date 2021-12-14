@@ -8,10 +8,8 @@ import com.natali.cultickets.model.Theatre;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Component
@@ -152,7 +150,9 @@ public class ShowRepository {
         while (resultSet.next()) {
             Show show = new Show();
             show.setId(resultSet.getInt("ss_id"));
-            show.setDatetime(resultSet.getTimestamp("ss_time"));
+            LocalDateTime datetime = resultSet.getTimestamp("ss_time").toLocalDateTime();
+            String[] dts = datetime.toString().split("T");
+            show.setDatetime(dts[0] + " " + dts[1]);
             showList.add(show);
         }
         resultSet.close();
