@@ -3,7 +3,7 @@ package com.natali.cultickets.dto;
 import lombok.Data;
 
 @Data
-public class CityDto {
+public class RegionDto {
     private String name;
-    private RegionDto region;
+    private CountryDto country;
 }

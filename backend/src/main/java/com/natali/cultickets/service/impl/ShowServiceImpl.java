@@ -1,45 +1,41 @@
-//package com.natali.cultickets.service.impl;
-//
-//import com.natali.cultickets.dto.ShowDto;
-//import com.natali.cultickets.mapstruct.ShowMapper;
-//import com.natali.cultickets.model.Scheme;
-//import com.natali.cultickets.model.Show;
-//import com.natali.cultickets.model.ShowState;
-//import com.natali.cultickets.model.ShowType;
-//import com.natali.cultickets.model.Theater;
-//import com.natali.cultickets.repository.ShowRepository;
-//import com.natali.cultickets.service.SchemeService;
-//import com.natali.cultickets.service.ShowService;
-//import com.natali.cultickets.service.ShowStateService;
-//import com.natali.cultickets.service.ShowTypeService;
-//import com.natali.cultickets.service.TheaterService;
-//import com.natali.cultickets.service.exception.ServiceException;
-//import java.util.List;
-//import java.util.stream.Collectors;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.stereotype.Service;
-//
-//@Service
-//public class ShowServiceImpl implements ShowService {
-//    private final ShowRepository showRepository;
-//    private final ShowMapper showMapper;
-//    private final TheaterService theaterService;
+package com.natali.cultickets.service.impl;
+
+import com.natali.cultickets.dto.ShowDto;
+import com.natali.cultickets.mapstruct.ShowMapper;
+import com.natali.cultickets.model.Show;
+import com.natali.cultickets.repository.ShowRepository;
+import com.natali.cultickets.service.ShowService;
+import com.natali.cultickets.service.ShowStateService;
+import com.natali.cultickets.service.ShowTypeService;
+import com.natali.cultickets.service.TheaterService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.sql.SQLException;
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Service
+public class ShowServiceImpl implements ShowService {
+    private final ShowRepository showRepository;
+    private final ShowMapper showMapper;
+    private final TheaterService theaterService;
 //    private final SchemeService schemeService;
-//    private final ShowStateService showStateService;
+    private final ShowStateService showStateService;
 //    private final ShowTypeService showTypeService;
-//
-//    @Autowired
-//    public ShowServiceImpl(ShowRepository showRepository, ShowMapper showMapper, TheaterService theaterService,
-//                           SchemeService schemeService, ShowStateService showStateService, ShowTypeService showTypeService) {
-//        this.showRepository = showRepository;
-//        this.showMapper = showMapper;
-//        this.theaterService = theaterService;
+
+    @Autowired
+    public ShowServiceImpl(ShowRepository showRepository, ShowMapper showMapper, TheaterService theaterService,
+                           ShowStateService showStateService) {
+        this.showRepository = showRepository;
+        this.showMapper = showMapper;
+        this.theaterService = theaterService;
 //        this.schemeService = schemeService;
-//
-//        this.showStateService = showStateService;
+
+        this.showStateService = showStateService;
 //        this.showTypeService = showTypeService;
-//    }
-//
+    }
+
 //    public void updateShow(ShowDto showDto) {
 //        this.showRepository.updateShow(showDto.getId(), showDto.getName(), showDto.getDescription());
 //    }
@@ -65,20 +61,21 @@
 //        return this.showRepository.save(show);
 //
 //    }
-//
-//    @Override
-//    public List<ShowDto> findShows(int theaterId, int showTypeId) {
+
+    @Override
+    public List<ShowDto> findShows(int theaterId, int showTypeId) {
 //        if (theaterId == 0 && showTypeId == 0) {
-//            return getAllShows();
-//        } else if (showTypeId == 0) {
+            return getAllShows();
+//        }
+//        else if (showTypeId == 0) {
 //            return getShowsByTheater(theaterId);
 //        } else if (theaterId == 0) {
 //            return getShowsByType(showTypeId);
 //        } else {
 //            return getShowsByTheaterAndType(theaterId, showTypeId);
 //        }
-//    }
-//
+    }
+
 //    @Override
 //    public void deleteShow(ShowDto showDto) {
 //        Show show = this.showRepository.findById(showDto.getId())
@@ -86,12 +83,17 @@
 //        this.showRepository.delete(show);
 //    }
 //
-//    public List<ShowDto> getAllShows() {
-//        List<Show> allShows = this.showRepository.findAll();
-//        return allShows.stream()
-//                .map(this.showMapper::showToShowDto)
-//                .collect(Collectors.toList());
-//    }
+    public List<ShowDto> getAllShows() {
+        List<Show> allShows = null;
+        try {
+            allShows = this.showRepository.findAll();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return allShows.stream()
+                .map(this.showMapper::showToShowDto)
+                .collect(Collectors.toList());
+    }
 //
 //    private List<ShowDto> getShowsByTheater(int theaterId) {
 //        Theater theater = this.theaterService.findTheater(theaterId)
@@ -121,5 +123,5 @@
 //                .map(this.showMapper::showToShowDto)
 //                .collect(Collectors.toList());
 //    }
-//
-//}
+
+}

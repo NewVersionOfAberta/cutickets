@@ -1,15 +1,8 @@
 package com.natali.cultickets.controller;
 
-import com.natali.cultickets.dto.ShowDto;
-import com.natali.cultickets.dto.ShowTypeDto;
-import com.natali.cultickets.dto.TheaterDto;
-import com.natali.cultickets.service.ShowService;
-import com.natali.cultickets.service.ShowTypeService;
-import com.natali.cultickets.service.TheaterService;
 //import com.natali.cultickets.service.impl.ShowServiceImpl;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+        import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

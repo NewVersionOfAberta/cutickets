@@ -9,9 +9,8 @@ import javax.validation.constraints.NotEmpty;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class TheaterHall {
+public class Region {
     private int id;
-    private Theatre theatre;
-    @NotEmpty(message = "*Please provide a theater hall name")
+    @NotEmpty(message = "*Please provide a region name")
     private String name;
 }
