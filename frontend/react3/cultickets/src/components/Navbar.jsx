@@ -6,14 +6,14 @@ import { AuthContext } from "../context/AuthContext";
 export const Navbar = () => {
   // const history = useHistory();
   const auth = useContext(AuthContext);
-  const [isActive, setActive] = useState([false, false, false]);
+  const [isActive, setActive] = useState([false, false, false, false]);
   const logoutHandler = (event) => {
     auth.logout();
     // history.push("/");
   };
 
   const setPreActive = (index) => {
-    let active = [false, false, false];
+    let active = [false, false, false, false];
     active[index - 1] = true;
     setActive(active);
   }
@@ -30,7 +30,9 @@ export const Navbar = () => {
         <LinkContainer className={`nav-link ${isActive[2] ? "active" : ""}`} to="/" onClick={logoutHandler}>
           <NavItem eventkey={3}>Log out</NavItem>
         </LinkContainer>
-        
+        <LinkContainer className={`nav-link ${isActive[3] ? "active" : ""}`} to="/" onClick={logoutHandler}>
+          <NavItem eventkey={4}>Admin</NavItem>
+        </LinkContainer>
     </Nav>
   );
 };
