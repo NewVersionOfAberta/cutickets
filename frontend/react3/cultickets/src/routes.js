@@ -33,16 +33,17 @@ export const useRoutes = (isAuthentificated, roles) => {
     } else {
       return (
         <Routes>
-          <Route path="/shows" exact element={<ShowPage />}>
-            {/* <DeadlinePage /> */}
-          </Route>
+          <Route path="/shows" exact element={<ShowPage />}></Route>
+          {/* <Route path="/create" exact>
+            <CreateDeadlinePage />
+          </Route> */}
           <Route
             path="/scheduled-show/:id"
             element={<ScheduledShowPage />}
           ></Route>
-          {/* <CreateDeadlinePage /> */}
           <Route path="/tickets/:id" element={<TicketsPage />}></Route>
-          {/* <Navigate to={"/deadlines"} /> */}
+          <Route path="/profile" exact element={<Profile />}></Route>
+          {/* <Navigate to={"/shows"} /> */}
         </Routes>
       );
     }

@@ -6,11 +6,11 @@ import com.natali.cultickets.model.User;
 import java.util.Optional;
 
 public interface UserService {
-    void checkUserExists(String email);
-
-    Optional<UserDto> findUserDtoByEmail(String email);
-
-    Optional<User> findUserByEmail(String email);
-
-    User saveUser(UserPostDto userPostDto);
+//    void checkUserExists(String email);
+//
+//    Optional<UserDto> findUserDtoByEmail(String email);
+//
+//    Optional<User> findUserByEmail(String email);
+//
+//    User saveUser(UserPostDto userPostDto);
 }

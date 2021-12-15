@@ -15,7 +15,6 @@ import java.util.Set;
 @NoArgsConstructor
 public class Show {
     private int id;
-//    @NotEmpty(message = "*Please provide the theatre for the show")
     private Theatre theatre;
     @NotEmpty(message = "*Please provide show genre")
     private Set<Genre> genre;
@@ -25,6 +24,5 @@ public class Show {
     private String description;
     @NotEmpty(message = "*Please provide age rating for the show")
     private AgeRating ageRating;
-//    @NotEmpty(message = "*Please provide show time")
     private String datetime;
 }

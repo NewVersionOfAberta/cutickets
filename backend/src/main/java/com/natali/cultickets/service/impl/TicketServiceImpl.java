@@ -5,8 +5,10 @@ import com.natali.cultickets.mapstruct.TicketMapper;
 import com.natali.cultickets.model.Ticket;
 import com.natali.cultickets.repository.TicketRepository;
 import com.natali.cultickets.service.TicketService;
+import com.natali.cultickets.service.exception.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.SQLException;
 import java.util.HashSet;
@@ -58,34 +60,31 @@ public class TicketServiceImpl implements TicketService {
                 .collect(Collectors.toList());
     }
 
-//    @Override
-//    public List<TicketDto> findUserTickets(int userId) {
-//        List<Ticket> ticketsByUserId = this.ticketRepository.findByUserId(userId);
-//        return ticketsByUserId.stream()
-//                .map(this.ticketMapper::ticketToTicketDto)
-//                .collect(Collectors.toList());
-//    }
-//
-//    @Override
-//    @Transactional
-//    public void buyTicket(TicketDto ticketDto, User user) {
-//        Ticket ticket = this.entityManager.find(Ticket.class, ticketDto.getId(), LockModeType.PESSIMISTIC_WRITE);
-//        String ticketStateName = ticket.getTicketState().getName();
-//        if (NOT_ACTIVE_TICKET_STATES.contains(ticketStateName)) {
-//            throw new ServiceException("Ticket unavailable. It must have state 'Active', but has state: " + ticketStateName);
-//        }
-//
-//        TicketState soldTicketState = this.ticketStateRepository.findByName(SOLD_STATE);
-//        ticket.setTicketState(soldTicketState);
-//
-//        SoldTicket soldTicket = new SoldTicket();
-//        soldTicket.setTicket(ticket);
-//        soldTicket.setDatetime(Date.valueOf(LocalDate.now()));
-//        soldTicket.setUser(user);
-//
-//        this.ticketRepository.save(ticket);
-//        this.soldTicketRepository.save(soldTicket);
-//    }
+    @Override
+    public List<TicketDto> getUserTickets(int userId) {
+        List<Ticket> ticketsByUserId = null;
+        try {
+            ticketsByUserId = this.ticketRepository.getUserTickets(userId);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return ticketsByUserId.stream()
+                .map(this.ticketMapper::ticketToTicketDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public void buyTicket(int userId, int ticketId) {
+        try {
+            this.ticketRepository.buyTicket(userId, ticketId);
+        } catch (SQLException e) {
+            throw new ServiceException("The ticket is unavailable.");
+        }
+    }
+
+
+
 //
 //    @Override
 //    @Transactional
