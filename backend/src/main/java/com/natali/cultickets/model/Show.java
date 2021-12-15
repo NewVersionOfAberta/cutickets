@@ -26,5 +26,5 @@ public class Show {
     @NotEmpty(message = "*Please provide age rating for the show")
     private AgeRating ageRating;
 //    @NotEmpty(message = "*Please provide show time")
-    private Timestamp datetime;
+    private String datetime;
 }
