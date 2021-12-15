@@ -2,7 +2,7 @@ import React, { useState, useContext } from "react";
 import { useHttp } from "../hooks/http.hook";
 import { AuthContext } from "../context/AuthContext";
 import { SoldTicket } from "../components/SoldTicket";
-import { useParams } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
 
 export const Profile = () => {
   const showId = useParams().id;
@@ -60,7 +60,9 @@ export const Profile = () => {
               <div id="user-bday">Date of birth: 20.10.1999</div>
               <div id="user-city">Vitebsk, Belarus</div>
               <div id="user-email">some@mail.ru</div>
-              <div class="card-footer text-muted">2 days ago</div>
+              <div class="card-footer text-muted">
+                <NavLink to={`/statistics`}>Statistics</NavLink>
+              </div>
               <h5>Active orders:</h5>
               {soldTickets}
             </div>
