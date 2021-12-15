@@ -15,12 +15,16 @@ export const TicketsPage = () => {
 
   const fetchTickets = useCallback(async () => {
     try {
-      const fetched = await request(`/tickets/show/${showId}`, "GET", null, {
-        Authorization: `user ${token}`,
-      });
+      const fetched = await request(
+        `/tickets/scheduledShow/${showId}`,
+        "GET",
+        null,
+        {
+          Authorization: `user ${token}`,
+        }
+      );
       setTickets(fetched.tickets);
-      //   setRows(fetched.rows);
-      //   setPlaces(fetched.places);
+      console.log(fetched.tickets);
     } catch (e) {}
   }, [request, token, showId, setTickets]);
 
@@ -29,6 +33,6 @@ export const TicketsPage = () => {
   }, [fetchTickets]);
 
   return tickets.map((e) => {
-    <Seat>{{ id: e.id, row: e.row, column: e.place, price: e.price }}</Seat>;
+    return <Seat>{e}</Seat>;
   });
 };

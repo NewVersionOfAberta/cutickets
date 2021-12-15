@@ -8,6 +8,7 @@ import { AuthPage } from "./pages/AuthPage";
 import { ShowPage } from "./pages/ShowPage";
 import { TicketsPage } from "./pages/TicketsPage";
 import { ScheduledShowPage } from "./pages/ScheduledShowPage";
+import { Profile } from "./pages/Profile";
 
 export const useRoutes = (isAuthentificated, roles) => {
   if (isAuthentificated) {
@@ -22,6 +23,8 @@ export const useRoutes = (isAuthentificated, roles) => {
             path="/scheduled-show/:id"
             element={<ScheduledShowPage />}
           ></Route>
+          <Route path="/tickets/:id" element={<TicketsPage />}></Route>
+          <Route path="/profile" exact element={<Profile />}></Route>
           {/* <Navigate to={"/shows"} /> */}
         </Routes>
       );
@@ -36,7 +39,7 @@ export const useRoutes = (isAuthentificated, roles) => {
             element={<ScheduledShowPage />}
           ></Route>
           {/* <CreateDeadlinePage /> */}
-          <Route path="/details/:id">{/* <DetailsPage /> */}</Route>
+          <Route path="/tickets/:id" element={<TicketsPage />}></Route>
           {/* <Navigate to={"/deadlines"} /> */}
         </Routes>
       );

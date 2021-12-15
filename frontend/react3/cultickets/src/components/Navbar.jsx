@@ -19,9 +19,9 @@ export const Navbar = () => {
   }
 
   return (
-    <Nav  className="nav nav-pills nav-justified" onSelect={(key) => setPreActive(key)}>
-        <LinkContainer className={`nav-link ${isActive[0] ? "active" : ""}`} to="/create">
-           <NavItem eventkey={1}>Create</NavItem>
+    <Nav className="nav nav-pills nav-justified" onSelect={(key) => setPreActive(key)}>
+        <LinkContainer className={`nav-link ${isActive[0] ? "active" : ""}`} to="/profile">
+           <NavItem eventkey={1}>Profile</NavItem>
         </LinkContainer>
         <LinkContainer className={`nav-link ${isActive[1] ? "active" : ""}`} to="/shows">
           <NavItem eventkey={2}>Shows</NavItem>

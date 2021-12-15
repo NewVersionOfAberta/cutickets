@@ -1,30 +1,30 @@
-import React, { useEffect, useState, useContext, useCallback } from "react";
+import React, { useContext, useCallback } from "react";
 import { useHttp } from "../hooks/http.hook";
 import { AuthContext } from "../context/AuthContext";
 
-export const Seat = ({children}) => {
+export const SoldTicket = ({children}) => {
     const ticket = children;
     const { token, userName } = useContext(AuthContext);
     const { loading, request } = useHttp();
     const id = ticket.id;
-    const buyHandler = useCallback(async () => {
+    const returnHandler = useCallback(async () => {
         try {
           const data = await request(
-            `tickets/buy/${id}`,
+            `tickets/return/${id}`,
             "DELETE",
             null,
             { Authorization: `user ${token}` }
           );
         } catch (e) {}
       }, [request, token, id]);
-
+    const returnButton = <button onClick={returnHandler}>Return</button>;
     return <>
         <div className="card">
         <div className="card-header">
         <div className="container">
           <div className="row">
             <span className="col text-secondary">
-            {ticket.theatre.name}
+            {ticket.showName}
             </span>
             </div>
           </div>
@@ -32,13 +32,13 @@ export const Seat = ({children}) => {
         </div>
         <div className="card-body">
           <ul>
-            <li>Row: {ticket.seat.row}</li>
-            <li>Number: {ticket.seat.number}</li>
-            <li>Sector: {ticket.sector.name}</li>
-            <li>Hall: {ticket.theaterHall.name}</li>
+            <li>Row: {ticket.row}</li>
+            <li>Number: {ticket.place}</li>
+            <li>Status: {ticket.status}</li>
+            <li>Date: {ticket.datetime}</li>
             <li>Price: {ticket.price / 100} $</li>
           </ul>
-          <button value="${e.id}" className="btn btn-warning book">Buy</button>
+          <button value="${e.id}" className="btn btn-warning book">Return</button>
         </div>
   </>
 }
