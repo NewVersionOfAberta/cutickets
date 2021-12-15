@@ -50,44 +50,50 @@ export const AuthPage = () => {
       <div className="col s6 offset-s3">
         <h1>Cultickets</h1>
         <div className="card blue-grey lighten-4">
-          <div className="card-content white-text">
-            <span className="card-title blue-grey-text darken-2">
-              Authorization
-            </span>
-            <div className="input-field">
-              <input
-                id="login"
-                type="text"
-                name="login"
-                value={form.login}
-                onChange={changeHandler}
-              />
-              <label htmlFor="Email">Email</label>
+          <div class="d-flex justify-content-center" >
+            <div className="card-content white-text">
+              <h4>
+                Authorization
+              </h4>
+              <div className="input-field">
+                 <label htmlFor="Email">Email</label>
+                 <br/>
+                <input
+                  id="login"
+                  type="text"
+                  name="login"
+                  value={form.login}
+                  onChange={changeHandler}
+                />
+                
+              </div>
+              <div className="input-field">
+                <label htmlFor="Password">Password</label>
+                <br/>
+                <input
+                  id="password"
+                  type="password"
+                  className="validate"
+                  name="password"
+                  value={form.password}
+                  onChange={changeHandler}
+                />
+                
+              </div>
+              <div className="card-action" class="d-flex justify-content-around">
+                <button className="btn yellow darken-4" onClick={loginHandler}>
+                  Sign in
+                </button>
+                <Link
+                  className="btn grey lighten-1 black-text"
+                  to="/registration"
+                  disabled={loading}
+                >
+                  Sign up
+                </Link>
+              </div>
             </div>
-            <div className="input-field">
-              <input
-                id="password"
-                type="password"
-                className="validate"
-                name="password"
-                value={form.password}
-                onChange={changeHandler}
-              />
-              <label htmlFor="Password">Password</label>
-            </div>
-          </div>
-          <div className="card-action">
-            <button className="btn yellow darken-4" onClick={loginHandler}>
-              Sign in
-            </button>
-            <Link
-              className="btn grey lighten-1 black-text"
-              to="/registration"
-              disabled={loading}
-            >
-              Sign up
-            </Link>
-          </div>
+          </div>          
         </div>
       </div>
     </div>

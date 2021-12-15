@@ -17,11 +17,16 @@ export const useHttp = () => {
           body,
           headers,
         });
-        const data = await response.json();
-
         if (!response.ok) {
           throw new Error(data.message || "Something went wrong");
         }
+
+        let data = undefined;
+        try {
+          data = await response.json();
+        } catch (e) { }
+
+
         setLoading(false);
         return data;
       } catch (e) {

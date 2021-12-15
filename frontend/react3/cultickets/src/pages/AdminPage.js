@@ -19,7 +19,7 @@ export const AdminPage = () => {
           Authorization: `user ${token}`,
         }
       );
-      setUsers(fetched.users);
+      setUsers(fetched.users.sort((u1, u2) => u1.id - u2.id));
     } catch (e) {}
   }, [request, token, setUsers]);
 
@@ -27,7 +27,7 @@ export const AdminPage = () => {
     fetchShows();
   }, [fetchShows]);
 
-  const activate = (user) => {
+  const activate = async (user) => {
     await request(
         `/admin/users/activate`,
         "POST",
@@ -36,9 +36,10 @@ export const AdminPage = () => {
           Authorization: `user ${token}`,
         }
       );
+    fetchShows();
   }
 
-  const disable = (user) => {
+  const disable = async (user) => {
     await request(
         `/admin/users/disable`,
         "POST",
@@ -47,6 +48,7 @@ export const AdminPage = () => {
           Authorization: `user ${token}`,
         }
       );
+    fetchShows();
   }
 
 
@@ -66,7 +68,10 @@ export const AdminPage = () => {
         <p className="card-text">Surname: {e.surname}</p>
         <p className="card-text">Email: {e.email}</p>
         <p className="card-text">Status: {e.active ? "active" : "inactive"}</p>
-        <button value={`${e.id}`} onClick={e.active ? () => disable(e) : () => activate(e)} className="btn btn-warning book">{}</button>
+        <button value={`${e.id}`} onClick={e.active ? () => disable(e) : () => activate(e)} className="btn btn-warning book">
+        {
+          e.active ? "Disable" : "Activate"
+        }</button>
       </div>
     </>
   ));

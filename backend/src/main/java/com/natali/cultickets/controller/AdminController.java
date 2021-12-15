@@ -43,7 +43,17 @@ public class AdminController {
 //            log.error("Failed to create show", e);
 //        }
 //    return responseEntity;
-}
+    }
+
+    @PostMapping("/users/disable")
+    void disableUser(@RequestBody UserDto userDto) {
+        userService.disableUser(userDto);
+    }
+
+    @PostMapping("/users/activate")
+    void activateUser(@RequestBody UserDto userDto) {
+        userService.activateUser(userDto);
+    }
 
     @PostMapping("/show/submit")
     ResponseEntity<String> submitShow(@RequestBody ShowDto showDto) {

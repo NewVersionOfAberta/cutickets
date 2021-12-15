@@ -40,6 +40,24 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void disableUser(UserDto user) {
+        try {
+            userRepository.disableUser(user.getId());
+        } catch (SQLException throwables) {
+            throw new RuntimeException();
+        }
+    }
+
+    @Override
+    public void activateUser(UserDto user) {
+        try {
+            userRepository.activateUser(user.getId());
+        } catch (SQLException throwables) {
+            throw new RuntimeException();
+        }
+    }
+
+    @Override
     public void updateUserStatus(String status) {
 
     }

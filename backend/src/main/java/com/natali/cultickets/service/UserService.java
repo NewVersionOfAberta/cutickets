@@ -16,7 +16,9 @@ public interface UserService {
 //
 //    User saveUser(UserPostDto userPostDto);
     List<UserDto> getAllUsers();
+    void disableUser(UserDto user);
+    void activateUser(UserDto userDto);
     void updateUserStatus(String status);
     void updateUserAccount(UserDto user);
-
+    
 }

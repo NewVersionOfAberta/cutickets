@@ -38,8 +38,8 @@ public class UserRepository {
         ResultSet resultSet = preparedStatement.executeQuery();
         while (resultSet.next()) {
             UserDto userDto = new UserDto();
-            String active = resultSet.getString("u_id");
-            userDto.setId( resultSet.getInt("as_name"));
+            String active = resultSet.getString("as_name");
+            userDto.setId( resultSet.getInt("u_id"));
             userDto.setActive("active".equals(active));
             userDto.setEmail(resultSet.getString("pd_email"));
             userDto.setUserName(resultSet.getString("au_login"));
@@ -85,5 +85,23 @@ public class UserRepository {
         }
         resultSet.close();
         return roles;
+    }
+
+    public void disableUser(int userId ) throws SQLException {
+        Connection connection = config.getConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement("update `user` as u " +
+                "set u.u_account_status_id = (select astat.as_id from account_status as astat where astat.as_name = \"inactive\") " +
+                "where u.u_id = ?");
+        preparedStatement.setInt(1, userId);
+        preparedStatement.executeUpdate();
+    }
+
+    public void activateUser(int userId ) throws SQLException {
+        Connection connection = config.getConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement("update `user` as u " +
+                "set u.u_account_status_id = (select astat.as_id from account_status as astat where astat.as_name = \"active\") " +
+                "where u.u_id = ?");
+        preparedStatement.setInt(1, userId);
+        preparedStatement.executeUpdate();
     }
 }
