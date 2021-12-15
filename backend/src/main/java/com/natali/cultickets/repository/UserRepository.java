@@ -2,6 +2,7 @@ package com.natali.cultickets.repository;
 
 
 import com.natali.cultickets.db.DataAccessConfig;
+import com.natali.cultickets.dto.UserDto;
 import com.natali.cultickets.model.AuthInfo;
 import com.natali.cultickets.model.Role;
 import com.natali.cultickets.model.User;
@@ -10,7 +11,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -23,6 +26,30 @@ public class UserRepository {
 
     @Autowired
     private DataAccessConfig config;
+
+    public List<UserDto> getAllUsers() throws SQLException {
+        Connection connection = config.getConnection();
+        List<UserDto> userDtos = new ArrayList<>();
+        PreparedStatement preparedStatement = connection.prepareStatement(
+                "select u.u_id, au.au_login, asd.as_name, pd.pd_name, pd.pd_surname, pd.pd_email from authorization as au \n" +
+                        "join `user` as u on u.u_authorization_id = au.au_id\n" +
+                        "join personal_data as pd on u.u_personal_data_id = pd.pd_id\n" +
+                        "join account_status as asd on u.u_account_status_id = asd.as_id" );
+        ResultSet resultSet = preparedStatement.executeQuery();
+        while (resultSet.next()) {
+            UserDto userDto = new UserDto();
+            String active = resultSet.getString("as_name");
+            userDto.setId( resultSet.getInt("u_id"));
+            userDto.setActive("active".equals(active));
+            userDto.setEmail(resultSet.getString("pd_email"));
+            userDto.setUserName(resultSet.getString("au_login"));
+            userDto.setName(resultSet.getString("pd_name"));
+            userDto.setSurname(resultSet.getString("pd_surname"));
+            userDtos.add(userDto);
+        }
+        resultSet.close();
+        return userDtos;
+    }
 
     public AuthInfo findUserByLogin(String login) throws SQLException {
         Connection connection = config.getConnection();
@@ -58,5 +85,23 @@ public class UserRepository {
         }
         resultSet.close();
         return roles;
+    }
+
+    public void disableUser(int userId ) throws SQLException {
+        Connection connection = config.getConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement("update `user` as u " +
+                "set u.u_account_status_id = (select astat.as_id from account_status as astat where astat.as_name = \"inactive\") " +
+                "where u.u_id = ?");
+        preparedStatement.setInt(1, userId);
+        preparedStatement.executeUpdate();
+    }
+
+    public void activateUser(int userId ) throws SQLException {
+        Connection connection = config.getConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement("update `user` as u " +
+                "set u.u_account_status_id = (select astat.as_id from account_status as astat where astat.as_name = \"active\") " +
+                "where u.u_id = ?");
+        preparedStatement.setInt(1, userId);
+        preparedStatement.executeUpdate();
     }
 }
