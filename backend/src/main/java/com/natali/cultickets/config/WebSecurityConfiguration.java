@@ -41,10 +41,10 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter imple
                 .cors().and().csrf().disable().httpBasic().disable()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .authorizeRequests().antMatchers("/user/**").authenticated()
-                .antMatchers("/admin/**").hasRole("ADMIN")
-                .antMatchers("/home", "/", "/login", "/registration", "/shows", "/tickets").permitAll()
+//                .and()
+//                .authorizeRequests().antMatchers("/user/**").authenticated()
+//                .antMatchers("/admin/**").hasRole("ADMIN")
+//                .antMatchers("/home", "/", "/login", "/registration", "/shows", "/tickets").permitAll()
                 .and()
                 .exceptionHandling().authenticationEntryPoint(this.jwtAuthenticationEntryPoint);
 

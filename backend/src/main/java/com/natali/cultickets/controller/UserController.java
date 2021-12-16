@@ -1,10 +1,9 @@
 package com.natali.cultickets.controller;
 
 
-import com.natali.cultickets.dto.TicketDto;
-import com.natali.cultickets.dto.UserDto;
-import com.natali.cultickets.dto.UserGetDto;
+import com.natali.cultickets.dto.*;
 import com.natali.cultickets.mapstruct.UserMapper;
+import com.natali.cultickets.model.Genre;
 import com.natali.cultickets.model.User;
 import com.natali.cultickets.service.TicketService;
 import com.natali.cultickets.service.UserService;
@@ -91,6 +90,24 @@ public class UserController {
         try {
             UserDto userInfo = this.userService.getUserInfo(userId);
             responseData.put("info", userInfo);
+            responseEntity = new ResponseEntity<>(responseData, HttpStatus.OK);
+        } catch (Exception e) {
+            responseData.put(MESSAGE_KEY, "Failed to find user's tickets.");
+            responseEntity = new ResponseEntity<>(responseData, HttpStatus.INTERNAL_SERVER_ERROR);
+            log.error("Failed to find the user's tickets.", e);
+        }
+        return responseEntity;
+    }
+
+    @GetMapping("/{userId}/stats")
+    public ResponseEntity<Map<String, Object>> getStats(@PathVariable int userId) {
+        ResponseEntity<Map<String, Object>> responseEntity;
+        Map<String, Object> responseData = new HashMap<>();
+        try {
+            List<GenreDto> userInfo = this.userService.getPreferableGenres(userId);
+            List<ExpensesDto> exps = this.userService.getUserExpenses(userId);
+            responseData.put("info", userInfo);
+            responseData.put("exps", exps);
             responseEntity = new ResponseEntity<>(responseData, HttpStatus.OK);
         } catch (Exception e) {
             responseData.put(MESSAGE_KEY, "Failed to find user's tickets.");

@@ -1,7 +1,12 @@
 package com.natali.cultickets.service.impl;
 
+import com.natali.cultickets.dto.ExpensesDto;
+import com.natali.cultickets.dto.GenreDto;
 import com.natali.cultickets.dto.UserDto;
+import com.natali.cultickets.mapstruct.ExpensesMapper;
+import com.natali.cultickets.mapstruct.GenreMapper;
 import com.natali.cultickets.mapstruct.UserMapper;
+import com.natali.cultickets.model.Genre;
 import com.natali.cultickets.repository.UserRepository;
 import com.natali.cultickets.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -18,16 +24,22 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     //    private final RoleRepository roleRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-    private final UserMapper mapstructMapper;
+    private final UserMapper userMapper;
+    private final GenreMapper genreMapper;
+    private final ExpensesMapper expensesMapper;
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository,
                            BCryptPasswordEncoder bCryptPasswordEncoder,
-                           UserMapper mapstructMapper) {
+                           UserMapper mapstructMapper,
+                           GenreMapper genreMapper,
+                           ExpensesMapper expensesMapper) {
         this.userRepository = userRepository;
 //        this.roleRepository = roleRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
-        this.mapstructMapper = mapstructMapper;
+        this.userMapper = mapstructMapper;
+        this.genreMapper = genreMapper;
+        this.expensesMapper = expensesMapper;
     }
 
     @Override
@@ -71,6 +83,30 @@ public class UserServiceImpl implements UserService {
     public UserDto getUserInfo(int userId) {
         try {
             return userRepository.getUserInfo(userId);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public List<GenreDto> getPreferableGenres(int userId) {
+        try {
+            return userRepository.getPreferableGenres(userId).stream()
+                    .map(this.genreMapper::genreToGenreDto)
+                    .collect(Collectors.toList());
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public List<ExpensesDto> getUserExpenses(int userId) {
+        try {
+            return userRepository.getUserExpenses(userId).stream()
+                    .map(this.expensesMapper::expsToexpsDto)
+                    .collect(Collectors.toList());
         } catch (SQLException e) {
             e.printStackTrace();
             return null;

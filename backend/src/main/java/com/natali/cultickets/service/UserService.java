@@ -1,7 +1,11 @@
 package com.natali.cultickets.service;
 
+import com.natali.cultickets.dto.ExpensesDto;
+import com.natali.cultickets.dto.GenreDto;
 import com.natali.cultickets.dto.UserDto;
 import com.natali.cultickets.dto.UserPostDto;
+import com.natali.cultickets.model.Expenses;
+import com.natali.cultickets.model.Genre;
 import com.natali.cultickets.model.User;
 
 import java.util.List;
@@ -21,4 +25,6 @@ public interface UserService {
     void updateUserStatus(String status);
     void updateUserAccount(UserDto user);
     UserDto getUserInfo(int userId);
+    List<GenreDto> getPreferableGenres(int userId);
+    List<ExpensesDto> getUserExpenses(int userId);
 }
