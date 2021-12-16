@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useCallback, useEffect } from "react";
 import { useHttp } from "../hooks/http.hook";
 import { AuthContext } from "../context/AuthContext";
 import { SoldTicket } from "../components/SoldTicket";
@@ -12,14 +12,14 @@ export const Profile = () => {
 
   const fetchProfileInfo = useCallback(async () => {
     try {
-      const fetched = await request(``, "GET", null, {
+      const fetched = await request(`/user/${userId}`, "GET", null, {
         Authorization: `user ${token}`,
       });
-      console.log("", fetched);
+      console.log("Profile", fetched.info);
 
-      setProfileInfo(fetched);
+      setProfileInfo(fetched.info);
     } catch (e) {}
-  }, [userId, setProfileInfo]);
+  }, [userId, setProfileInfo, token]);
 
   const fetchTickets = useCallback(async () => {
     try {
@@ -29,15 +29,18 @@ export const Profile = () => {
 
       setTickets(fetched.tickets);
     } catch (e) {}
-  }, [userId, setTickets]);
+  }, [userId, setTickets, token]);
 
   useEffect(() => {
     fetchTickets();
-  }, [fetchTickets]);
-
+    fetchProfileInfo();
+  }, [fetchTickets, fetchProfileInfo]);
+  if (tickets && profileInfo) {
+    console.log("profileInfo", profileInfo);
     const soldTickets = tickets.map((e) => {
       return <SoldTicket>{e}</SoldTicket>;
     });
+
     return (
       <>
         <div className="container">
@@ -45,12 +48,12 @@ export const Profile = () => {
             <div className="card">
               <div className="card-body">
                 <h5 id="user-name" className="card-title">
-                  AndryKiller
+                  {`${profileInfo.userName}`}
                 </h5>
-                <div id="user-name">Name: Sergey Gavrilovitch Petrov</div>
-                <div id="user-bday">Date of birth: 20.10.1999</div>
-                <div id="user-city">Vitebsk, Belarus</div>
-                <div id="user-email">some@mail.ru</div>
+                <div id="user-name">{`Name: ${profileInfo.name} ${profileInfo.patronymic} ${profileInfo.surname}`}</div>
+                <div id="user-bday">{`Date of birth: ${profileInfo.birthDate}`}</div>
+                <div id="user-city">{`${profileInfo.city}`}</div>
+                <div id="user-email">{`${profileInfo.email}`}</div>
                 <div class="card-footer text-muted">
                   <NavLink to={`/statistics`}>Statistics</NavLink>
                 </div>
@@ -62,5 +65,7 @@ export const Profile = () => {
         </div>
       </>
     );
+  } else {
+    return <></>;
   }
 };

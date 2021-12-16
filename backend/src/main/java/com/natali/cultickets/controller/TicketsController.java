@@ -44,7 +44,7 @@ public class TicketsController {
         return responseEntity;
     }
 
-    @GetMapping("/scheduledShow/{ssId}/user={userId}&ticket={ticketId}")
+    @GetMapping("/scheduledShow/{userId}/{ticketId}")
     ResponseEntity<Void> buyTicket(@PathVariable int userId, @PathVariable int ticketId) {
         try {
             this.ticketService.buyTicket(userId, ticketId);

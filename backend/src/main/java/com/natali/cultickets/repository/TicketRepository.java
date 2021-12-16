@@ -29,7 +29,7 @@ public class TicketRepository  {
                         "left join sector as sec on sec.sec_id = se.se_sector_id " +
                         "left join hall as h on h.h_id = sec.sec_hall_id " +
                         "left join theatre as th on th.t_id = h.h_theatre_id " +
-                        "where ss.ss_id = ?");
+                        "where ss.ss_id = ? and ts.ts_name = 'active';");
         preparedStatement.setInt(1, ssId);
         ResultSet resultSet = preparedStatement.executeQuery();
         List<Ticket> tickets = new ArrayList<>();
