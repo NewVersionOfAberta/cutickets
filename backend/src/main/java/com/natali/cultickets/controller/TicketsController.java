@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,4 +43,17 @@ public class TicketsController {
         }
         return responseEntity;
     }
+
+    @GetMapping("/scheduledShow/{ssId}/user={userId}&ticket={ticketId}")
+    ResponseEntity<Void> buyTicket(@PathVariable int userId, @PathVariable int ticketId) {
+        try {
+            this.ticketService.buyTicket(userId, ticketId);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("Failed to get tickets", e);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
 }

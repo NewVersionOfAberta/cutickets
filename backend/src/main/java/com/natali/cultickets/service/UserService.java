@@ -20,5 +20,5 @@ public interface UserService {
     void activateUser(UserDto userDto);
     void updateUserStatus(String status);
     void updateUserAccount(UserDto user);
-    
+
 }
