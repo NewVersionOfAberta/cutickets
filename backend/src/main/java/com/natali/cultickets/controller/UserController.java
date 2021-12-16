@@ -84,6 +84,22 @@ public class UserController {
         return responseEntity;
     }
 
+    @GetMapping("/{userId}")
+    public ResponseEntity<Map<String, Object>> getUserInfo(@PathVariable int userId) {
+        ResponseEntity<Map<String, Object>> responseEntity;
+        Map<String, Object> responseData = new HashMap<>();
+        try {
+            UserDto userInfo = this.userService.getUserInfo(userId);
+            responseData.put("info", userInfo);
+            responseEntity = new ResponseEntity<>(responseData, HttpStatus.OK);
+        } catch (Exception e) {
+            responseData.put(MESSAGE_KEY, "Failed to find user's tickets.");
+            responseEntity = new ResponseEntity<>(responseData, HttpStatus.INTERNAL_SERVER_ERROR);
+            log.error("Failed to find the user's tickets.", e);
+        }
+        return responseEntity;
+    }
+
 //    @PutMapping("/tickets/purchase/")
 //    public ResponseEntity<Map<String, String>> buyTicket(@RequestBody List<TicketDto> tickets, Principal principal) {
 //        Map<String, String> response = new HashMap<>();
@@ -122,18 +138,13 @@ public class UserController {
 //        return message.toString();
 //    }
 
-    @PutMapping("/tickets/return/")
-    public ResponseEntity<Map<String, String>> returnTicket(@RequestBody TicketDto ticket, Principal principal) {
-        Map<String, String> response = new HashMap<>();
-        String userEmail = principal.getName();
-//        User user = this.userService.findUserByEmail(userEmail).orElseThrow();
+    @GetMapping("/tickets/return/user={userId}&ticket={ticketId}")
+    public ResponseEntity<Void> returnTicket(@PathVariable int userId, @PathVariable int ticketId) {
         try {
-//            this.ticketService.returnTicket(ticket, user);
-            response.put(MESSAGE_KEY, "Returned successfully");
-            return new ResponseEntity<>(response, HttpStatus.OK);
+            this.ticketService.returnTicket(userId, ticketId);
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (ServiceException e) {
-            response.put(MESSAGE_KEY, e.getMessage());
-            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

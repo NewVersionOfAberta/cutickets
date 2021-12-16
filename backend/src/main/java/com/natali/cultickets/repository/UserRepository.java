@@ -34,12 +34,12 @@ public class UserRepository {
                 "select u.u_id, au.au_login, asd.as_name, pd.pd_name, pd.pd_surname, pd.pd_email from authorization as au \n" +
                         "join `user` as u on u.u_authorization_id = au.au_id\n" +
                         "join personal_data as pd on u.u_personal_data_id = pd.pd_id\n" +
-                        "join account_status as asd on u.u_account_status_id = asd.as_id" );
+                        "join account_status as asd on u.u_account_status_id = asd.as_id");
         ResultSet resultSet = preparedStatement.executeQuery();
         while (resultSet.next()) {
             UserDto userDto = new UserDto();
             String active = resultSet.getString("as_name");
-            userDto.setId( resultSet.getInt("u_id"));
+            userDto.setId(resultSet.getInt("u_id"));
             userDto.setActive("active".equals(active));
             userDto.setEmail(resultSet.getString("pd_email"));
             userDto.setUserName(resultSet.getString("au_login"));
@@ -51,11 +51,37 @@ public class UserRepository {
         return userDtos;
     }
 
+    public UserDto getUserInfo(int userId) throws SQLException {
+        Connection connection = config.getConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(
+                "select u.u_id, au.au_login, pd.pd_name, pd.pd_surname, pd.pd_patronymic, " +
+                        "pd.pd_birthdate, pd.pd_email, c.c_name from authorization as au \n" +
+                        "join `user` as u on u.u_authorization_id = au.au_id\n" +
+                        "join personal_data as pd on u.u_personal_data_id = pd.pd_id\n" +
+                        "join city as c on c.c_id = pd.pd_city_id\n" +
+                        "where u.u_id = ?;");
+        preparedStatement.setInt(1, userId);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        UserDto userDto = new UserDto();
+        resultSet.next();
+        userDto.setId(resultSet.getInt("u_id"));
+        userDto.setEmail(resultSet.getString("pd_email"));
+        userDto.setUserName(resultSet.getString("au_login"));
+        userDto.setName(resultSet.getString("pd_name"));
+        userDto.setSurname(resultSet.getString("pd_surname"));
+        userDto.setPatronymic(resultSet.getString("pd_patronymic"));
+        userDto.setBirthDate(resultSet.getDate("pd_birthdate"));
+        userDto.setCity(resultSet.getString("c_name"));
+        preparedStatement.close();
+        resultSet.close();
+        return userDto;
+    }
+
     public AuthInfo findUserByLogin(String login) throws SQLException {
         Connection connection = config.getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement(
                 "select a.au_id, a.au_hash, a.au_salt, u.u_id from authorization as a " +
-                        "join user as u on u.u_authorization_id = a.au_id where au_login = ?" );
+                        "join user as u on u.u_authorization_id = a.au_id where au_login = ?");
         preparedStatement.setString(1, login);
         ResultSet resultSet = preparedStatement.executeQuery();
         AuthInfo authInfo = new AuthInfo();
@@ -75,7 +101,7 @@ public class UserRepository {
         Connection connection = config.getConnection();
         PreparedStatement preparedStatementForRoles = connection.prepareStatement(
                 "select r.r_id, r.r_name from mtm_user_role as mur " +
-                        "join role as r on r.r_id = mur.mtm_role_id where mur.mtm_user_id = ? " );
+                        "join role as r on r.r_id = mur.mtm_role_id where mur.mtm_user_id = ? ");
         preparedStatementForRoles.setInt(1, userId);
         ResultSet resultSet = preparedStatementForRoles.executeQuery();
         while (resultSet.next()) {
@@ -87,7 +113,7 @@ public class UserRepository {
         return roles;
     }
 
-    public void disableUser(int userId ) throws SQLException {
+    public void disableUser(int userId) throws SQLException {
         Connection connection = config.getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement("update `user` as u " +
                 "set u.u_account_status_id = (select astat.as_id from account_status as astat where astat.as_name = \"inactive\") " +
@@ -96,7 +122,7 @@ public class UserRepository {
         preparedStatement.executeUpdate();
     }
 
-    public void activateUser(int userId ) throws SQLException {
+    public void activateUser(int userId) throws SQLException {
         Connection connection = config.getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement("update `user` as u " +
                 "set u.u_account_status_id = (select astat.as_id from account_status as astat where astat.as_name = \"active\") " +

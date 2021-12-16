@@ -10,8 +10,8 @@ public interface TicketService {
     List<TicketDto> findTicketsToShow(int showId);
 
     List<TicketDto> getUserTickets(int userId);
-//
+
     void buyTicket(int userId, int ticketId);
-//
-//    void returnTicket(TicketDto ticketDto, User user);
+
+    void returnTicket(int userId, int ticketId);
 }

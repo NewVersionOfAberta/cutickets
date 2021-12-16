@@ -67,6 +67,16 @@ public class UserServiceImpl implements UserService {
 
     }
 
+    @Override
+    public UserDto getUserInfo(int userId) {
+        try {
+            return userRepository.getUserInfo(userId);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 
 //    public void checkUserExists(String email) {
 //        this.userRepository.findByEmail(email)

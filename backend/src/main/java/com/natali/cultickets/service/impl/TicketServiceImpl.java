@@ -83,9 +83,19 @@ public class TicketServiceImpl implements TicketService {
         }
     }
 
+    @Override
+    @Transactional
+    public void returnTicket(int userId, int ticketId) {
+        try {
+            this.ticketRepository.returnTicket(userId, ticketId);
+        } catch (SQLException e) {
+            throw new ServiceException("The ticket is unavailable.");
+        }
+    }
 
 
-//
+
+
 //    @Override
 //    @Transactional
 //    public void returnTicket(TicketDto ticketDto, User user) {
