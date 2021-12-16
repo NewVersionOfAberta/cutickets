@@ -45,7 +45,12 @@ export const ShowPage = () => {
       </div>
       <div className="card-body">
         <p className="card-text">{e.description}</p>
-        <NavLink to={`/scheduled-show/${e.id}`}>Book</NavLink>
+        <NavLink
+          className="btn btn-warning book"
+          to={`/scheduled-show/${e.id}`}
+        >
+          Book
+        </NavLink>
       </div>
     </>
   ));

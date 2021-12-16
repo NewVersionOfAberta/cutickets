@@ -29,7 +29,9 @@ export const ScheduledShowPage = () => {
     const dates = scheduledShows.scheduled_shows.map((e) => {
       return (
         <>
-          <NavLink to={`/tickets/${e.id}`}>Date: {e.datetime}</NavLink>
+          <NavLink className="btn btn-warning mt-3" to={`/tickets/${e.id}`}>
+            Date: {e.datetime}
+          </NavLink>
           <br />
         </>
       );
