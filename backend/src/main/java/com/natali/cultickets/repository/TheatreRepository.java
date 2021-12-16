@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,5 +39,20 @@ public class TheatreRepository {
         return Optional.of(theatre);
     }
 
-//    List<Theatre> findAll();
+    public List<Theatre> findAll() throws SQLException {
+        Connection connection = config.getConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(
+                "select t_id, t_name from theatre;" );
+        ResultSet resultSet = preparedStatement.executeQuery();
+        List<Theatre> theatres = new ArrayList<>();
+
+        while(resultSet.next()) {
+            Theatre theatre = new Theatre();
+            theatre.setId(resultSet.getInt("t_id"));
+            theatre.setName(resultSet.getString("t_name"));
+            theatres.add(theatre);
+        }
+        resultSet.close();
+        return theatres;
+    }
 }

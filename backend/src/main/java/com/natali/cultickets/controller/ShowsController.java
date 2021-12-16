@@ -3,9 +3,10 @@ package com.natali.cultickets.controller;
 //import com.natali.cultickets.service.impl.ShowServiceImpl;
 
 import com.natali.cultickets.dto.ShowDto;
+import com.natali.cultickets.dto.TheatreDto;
 import com.natali.cultickets.service.GenreService;
 import com.natali.cultickets.service.ShowService;
-import com.natali.cultickets.service.TheaterService;
+import com.natali.cultickets.service.TheatreService;
 import com.natali.cultickets.service.impl.ShowServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,16 +28,16 @@ public class ShowsController {
 
     private final ShowService showService;
     private final GenreService genreService;
-    private final TheaterService theaterService;
+    private final TheatreService theatreService;
 
     @Autowired
     public ShowsController(
             ShowServiceImpl showService,
-            GenreService genreService, TheaterService theaterService
+            GenreService genreService, TheatreService theaterService
     ) {
         this.showService = showService;
         this.genreService = genreService;
-        this.theaterService = theaterService;
+        this.theatreService = theaterService;
     }
 
     @GetMapping("/filters")
@@ -99,6 +100,38 @@ public class ShowsController {
             List<ShowDto> shows = this.showService.findScheduledShowsByShow(showId);
             responseData.put("show", show);
             responseData.put("scheduled_shows", shows);
+            responseEntity = new ResponseEntity<>(responseData, HttpStatus.OK);
+        } catch (Exception e) {
+            responseData.put("message", "Failed to get suitable shows.");
+            responseEntity = new ResponseEntity<>(responseData, HttpStatus.INTERNAL_SERVER_ERROR);
+            log.error("Failed to get suitable shows", e);
+        }
+        return responseEntity;
+    }
+
+    @GetMapping("/theatres")
+    ResponseEntity<Map<String, Object>> getTheatres() {
+        ResponseEntity<Map<String, Object>> responseEntity;
+        Map<String, Object> responseData = new HashMap<>();
+        try {
+            List<TheatreDto> theatres = this.theatreService.findAll();
+            responseData.put("theatres", theatres);
+            responseEntity = new ResponseEntity<>(responseData, HttpStatus.OK);
+        } catch (Exception e) {
+            responseData.put("message", "Failed to get suitable shows.");
+            responseEntity = new ResponseEntity<>(responseData, HttpStatus.INTERNAL_SERVER_ERROR);
+            log.error("Failed to get suitable shows", e);
+        }
+        return responseEntity;
+    }
+
+    @GetMapping("/theatre={id}")
+    ResponseEntity<Map<String, Object>> getTheatres(@PathVariable int id) {
+        ResponseEntity<Map<String, Object>> responseEntity;
+        Map<String, Object> responseData = new HashMap<>();
+        try {
+            List<ShowDto> shows = this.showService.getByTheatre(id);
+            responseData.put("shows", shows);
             responseEntity = new ResponseEntity<>(responseData, HttpStatus.OK);
         } catch (Exception e) {
             responseData.put("message", "Failed to get suitable shows.");
