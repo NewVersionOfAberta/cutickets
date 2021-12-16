@@ -72,6 +72,16 @@ public class TicketRepository  {
         preparedStatement.close();
     }
 
+    public void returnTicket(int userId, int ticketId) throws SQLException {
+        Connection connection = config.getConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(
+                "delete from sold_ticket where st_user_id=? and st_ticket_id=?;");
+        preparedStatement.setInt(1, userId);
+        preparedStatement.setInt(2, ticketId);
+        preparedStatement.execute();
+        preparedStatement.close();
+    }
+
     public List<Ticket> getUserTickets(int userId) throws SQLException {
         Connection connection = config.getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement(

@@ -18,4 +18,5 @@ public class UserDto {
     private Date birthDate;
     private Boolean active;
     private Set<Role> roles;
+    private String city;
 }
