@@ -21,6 +21,8 @@ public interface ShowService {
 
     List<ShowDto> getByTheatre(int userId, int id);
 
+    List<ShowDto> findByGenre(int genreId);
+
     List<ShowDto> findAll();
 //
 //    void deleteShow(ShowDto showDto);

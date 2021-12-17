@@ -2,12 +2,14 @@ package com.natali.cultickets.service.impl;
 
 import com.natali.cultickets.dto.ShowDto;
 import com.natali.cultickets.mapstruct.ShowMapper;
+import com.natali.cultickets.model.Genre;
 import com.natali.cultickets.model.Show;
 import com.natali.cultickets.repository.JournalRepository;
 import com.natali.cultickets.repository.ShowRepository;
 import com.natali.cultickets.service.GenreService;
 import com.natali.cultickets.service.ShowService;
 import com.natali.cultickets.service.TheatreService;
+import com.natali.cultickets.service.exception.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -73,12 +75,10 @@ public class ShowServiceImpl implements ShowService {
         else if (showTypeId == 0 && userId == 0) {
             return getByTheatre(user_id, theaterId);
         }
+        else if (theaterId == 0 && userId == 0) {
+            return findByGenre(showTypeId);
+        }
         return null;
-//        else if (theaterId == 0) {
-//            return getShowsByType(showTypeId);
-//        } else {
-//            return getShowsByTheaterAndType(theaterId, showTypeId);
-//        }
     }
 
 //    @Override
@@ -141,7 +141,7 @@ public class ShowServiceImpl implements ShowService {
     public List<ShowDto> getByTheatre(int userId, int id) {
         List<Show> allShows = null;
         try {
-            allShows = this.showRepository.getByTheatre(id);
+            allShows = this.showRepository.findByTheatre(id);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -161,14 +161,19 @@ public class ShowServiceImpl implements ShowService {
 //                .collect(Collectors.toList());
 //    }
 //
-//    private List<ShowDto> getShowsByType(int typeId) {
-//        ShowType type = this.showTypeService.findShowType(typeId)
-//                .orElseThrow(() -> new ServiceException("Cannot find show type with provided id"));
-//        List<Show> showsByType = this.showRepository.findByShowType(type);
-//        return showsByType.stream()
-//                .map(this.showMapper::showToShowDto)
-//                .collect(Collectors.toList());
-//    }
+    public List<ShowDto> findByGenre(int genreId) {
+        Genre genre = this.genreService.findShowType(genreId)
+                .orElseThrow(() -> new ServiceException("Cannot find show type with provided id"));
+        List<Show> showsByType = null;
+        try {
+            showsByType = this.showRepository.findByGenre(genreId);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return showsByType.stream()
+                .map(this.showMapper::showToShowDto)
+                .collect(Collectors.toList());
+    }
 //
 //    private List<ShowDto> getShowsByTheaterAndType(int theaterId, int typeId) {
 //        Theater theater = this.theaterService.findTheater(theaterId)
