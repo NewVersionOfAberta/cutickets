@@ -5,6 +5,7 @@ import com.natali.cultickets.dto.UserPostDto;
 import com.natali.cultickets.model.AuthInfo;
 import com.natali.cultickets.model.Theatre;
 import com.natali.cultickets.repository.BaseRepository;
+import com.natali.cultickets.repository.JournalRepository;
 import com.natali.cultickets.repository.TheatreRepository;
 import com.natali.cultickets.security.jwt.JwtUtils;
 //import com.natali.cultickets.service.UserService;
@@ -28,6 +29,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import static com.natali.cultickets.repository.JournalRepository.*;
+
 @Slf4j
 @RestController
 public class AuthController {
@@ -41,12 +44,16 @@ public class AuthController {
     @Autowired
     private TheatreRepository theatreRepository;
     @Autowired
+    private final JournalRepository journalRepository;
+    @Autowired
     public AuthController(
 //            UserServiceImpl userService,
-            JwtUtils jwtTokenUtil, AuthenticationManager authenticationManager) {
+            JwtUtils jwtTokenUtil, AuthenticationManager authenticationManager,
+            JournalRepository journalRepository) {
 //        this.userService = userService;
         this.jwtTokenUtil = jwtTokenUtil;
         this.authenticationManager = authenticationManager;
+        this.journalRepository = journalRepository;
     }
 
     @PostMapping("/login")
@@ -56,6 +63,9 @@ public class AuthController {
         String password = user.getPassword();
         this.authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(login, password));
         AuthInfo authInfo = userDetailsService.getUser();
+        int id = authInfo.getUserId();
+        journalRepository.write(id, "authorization", null, null, Operation.READ);
+
         String jwtToken = this.jwtTokenUtil.generateToken(authInfo, userDetailsService.getAuthorities());
         response.put("token", jwtToken);
         authInfo.setPasswordHash("");

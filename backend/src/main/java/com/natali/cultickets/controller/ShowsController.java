@@ -104,7 +104,7 @@ public class ShowsController {
     }
 
     @GetMapping("/showId={showId}")
-    ResponseEntity<Map<String, Object>> getShows(@PathVariable int showId, Principal principal) {
+    ResponseEntity<Map<String, Object>> getScheduledShows(@PathVariable int showId, Principal principal) {
         String login = principal.getName();
         AuthInfo authInfo = userService.findByLogin(login);
         int userId = authInfo.getUserId();
@@ -134,7 +134,7 @@ public class ShowsController {
         ResponseEntity<Map<String, Object>> responseEntity;
         Map<String, Object> responseData = new HashMap<>();
         try {
-            List<TheatreDto> theatres = this.theatreService.findAll();
+            List<TheatreDto> theatres = this.theatreService.findAll(user_id);
             responseData.put("theatres", theatres);
             responseEntity = new ResponseEntity<>(responseData, HttpStatus.OK);
         } catch (Exception e) {

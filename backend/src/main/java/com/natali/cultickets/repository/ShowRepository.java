@@ -19,7 +19,7 @@ public class ShowRepository {
         Connection connection = config.getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement(
                 "select sh.sh_id, sh.sh_name, sh.sh_description, ar.ar_name, t.t_name, c.name" +
-                        " from `show` as sh on sh.sh_id = ss.ss_show_id" +
+                        " from `show` as sh" +
                         " left join age_rating as ar on ar.ar_id = sh.sh_age_rating_id" +
                         " left join theatre as t on t.t_id = sh.sh_theatre_id" +
                         " left join address as ad on ad.add_id = t.t_address_id" +

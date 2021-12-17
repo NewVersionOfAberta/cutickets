@@ -3,6 +3,7 @@ package com.natali.cultickets.service.impl;
 import com.natali.cultickets.dto.TicketDto;
 import com.natali.cultickets.mapstruct.TicketMapper;
 import com.natali.cultickets.model.Ticket;
+import com.natali.cultickets.repository.JournalRepository;
 import com.natali.cultickets.repository.TicketRepository;
 import com.natali.cultickets.service.TicketService;
 import com.natali.cultickets.service.exception.ServiceException;
@@ -16,6 +17,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static com.natali.cultickets.repository.JournalRepository.*;
+
 @Service
 public class TicketServiceImpl implements TicketService {
     private static final String AVAILABLE_STATE = "Available";
@@ -27,17 +30,16 @@ public class TicketServiceImpl implements TicketService {
 
     private final TicketRepository ticketRepository;
     private final TicketMapper ticketMapper;
-//    private final SoldTicketRepository soldTicketRepository;
-//    private final TicketStateRepository ticketStateRepository;
+    private final JournalRepository journalRepository;
 
     @Autowired
-    public TicketServiceImpl(TicketRepository ticketRepository, TicketMapper ticketMapper
-//            , SoldTicketRepository soldTicketRepository, TicketStateRepository ticketStateRepository
+    public TicketServiceImpl(TicketRepository ticketRepository,
+                             TicketMapper ticketMapper,
+                             JournalRepository journalRepository
     ) {
         this.ticketRepository = ticketRepository;
         this.ticketMapper = ticketMapper;
-//        this.soldTicketRepository = soldTicketRepository;
-//        this.ticketStateRepository = ticketStateRepository;
+        this.journalRepository = journalRepository;
     }
 
 //    @Override
@@ -48,9 +50,11 @@ public class TicketServiceImpl implements TicketService {
 //    }
 
     @Override
-    public List<TicketDto> findTicketsToShow(int showId) {
+    public List<TicketDto> findTicketsToShow(int userId, int showId) {
         List<Ticket> ticketsByShow = null;
         try {
+            journalRepository.write(userId, "ticket", "t_scheduled_show_id",
+                    String.valueOf(showId), Operation.READ);
             ticketsByShow = this.ticketRepository.findByScheduledShowId(showId);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -64,6 +68,8 @@ public class TicketServiceImpl implements TicketService {
     public List<TicketDto> getUserTickets(int userId) {
         List<Ticket> ticketsByUserId = null;
         try {
+            journalRepository.write(userId, "sold_ticket", "st_user_id",
+                    String.valueOf(userId), Operation.READ);
             ticketsByUserId = this.ticketRepository.getUserTickets(userId);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -77,6 +83,10 @@ public class TicketServiceImpl implements TicketService {
     @Transactional
     public void buyTicket(int userId, int ticketId) {
         try {
+            journalRepository.write(userId, "sold_ticket", null,
+                    null, Operation.CREATE);
+            journalRepository.write(userId, "ticket", "t_ticket_status_id",
+                    String.valueOf(2), Operation.UPDATE);
             this.ticketRepository.buyTicket(userId, ticketId);
         } catch (SQLException e) {
             throw new ServiceException("The ticket is unavailable.");
@@ -87,6 +97,10 @@ public class TicketServiceImpl implements TicketService {
     @Transactional
     public void returnTicket(int userId, int ticketId) {
         try {
+            journalRepository.write(userId, "sold_ticket", null,
+                    null, Operation.DELETE);
+            journalRepository.write(userId, "ticket", "t_ticket_status_id",
+                    String.valueOf(1), Operation.UPDATE);
             this.ticketRepository.returnTicket(userId, ticketId);
         } catch (SQLException e) {
             throw new ServiceException("The ticket is unavailable.");
