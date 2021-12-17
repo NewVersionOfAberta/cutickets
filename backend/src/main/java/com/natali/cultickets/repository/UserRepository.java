@@ -3,9 +3,7 @@ package com.natali.cultickets.repository;
 
 import com.natali.cultickets.db.DataAccessConfig;
 import com.natali.cultickets.dto.UserDto;
-import com.natali.cultickets.model.AuthInfo;
-import com.natali.cultickets.model.Role;
-import com.natali.cultickets.model.User;
+import com.natali.cultickets.model.*;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -129,5 +127,37 @@ public class UserRepository {
                 "where u.u_id = ?");
         preparedStatement.setInt(1, userId);
         preparedStatement.executeUpdate();
+    }
+
+    public List<Genre> getPreferableGenres(int userId) throws SQLException {
+        List<Genre> genres = new ArrayList<>();
+        Connection connection = config.getConnection();
+        PreparedStatement preparedStatementForRoles = connection.prepareStatement(
+                "call find_preferable_user_genres(?);");
+        preparedStatementForRoles.setInt(1, userId);
+        ResultSet resultSet = preparedStatementForRoles.executeQuery();
+        while (resultSet.next()) {
+            String name = resultSet.getString("g_name");
+            int id = resultSet.getInt("g_id");
+            genres.add(new Genre(id, name));
+        }
+        resultSet.close();
+        return genres;
+    }
+
+    public List<Expenses> getUserExpenses(int userId) throws SQLException {
+        List<Expenses> expenses = new ArrayList<>();
+        Connection connection = config.getConnection();
+        PreparedStatement preparedStatementForRoles = connection.prepareStatement(
+                "call get_user_bought_tickets_statistics(?);");
+        preparedStatementForRoles.setInt(1, userId);
+        ResultSet resultSet = preparedStatementForRoles.executeQuery();
+        while (resultSet.next()) {
+            String month = resultSet.getString("month");
+            int exps = resultSet.getInt("total_exps");
+            expenses.add(new Expenses(month, exps));
+        }
+        resultSet.close();
+        return expenses;
     }
 }

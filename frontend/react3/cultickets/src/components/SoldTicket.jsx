@@ -3,7 +3,7 @@ import { useHttp } from "../hooks/http.hook";
 import { AuthContext } from "../context/AuthContext";
 
 export const SoldTicket = ({children}) => {
-    const ticket = children;
+    const { ticket, setChange } = children;
     const { token, userId } = useContext(AuthContext);
     const { loading, request } = useHttp();
     const id = ticket.id;
@@ -15,9 +15,10 @@ export const SoldTicket = ({children}) => {
             null,
             { Authorization: `user ${token}` }
           );
+          setChange(true);
         } catch (e) {}
-      }, [request, token, id, userId]);
-    const returnButton = ticket.ticketStatus.name == "sold" ? <button onClick={() => returnHandler(id)}>Return</button> : <></>;
+      }, [request, token, id, userId, setChange]);
+    const returnButton = ticket.ticketStatus.name == "sold" ? <button className="btn btn-warning book" onClick={() => returnHandler(id)}>Return</button> : <></>;
     // public class TicketDto {
 //   private int id;
 //   private int price;
@@ -45,7 +46,7 @@ export const SoldTicket = ({children}) => {
             <li>Row: {ticket.seat.row}</li>
             <li>Number: {ticket.seat.number}</li>
             <li>Status: {ticket.ticketStatus.name}</li>
-            {/* <li>Date: {ticket.show.datetime}</li> */}
+            <li>Date: {ticket.show.datetime}</li>
             <li>Price: {ticket.price / 100} $</li>
           </ul>
           {returnButton}

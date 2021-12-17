@@ -7,6 +7,7 @@ import { Seat } from "../components/Seat";
 export const TicketsPage = () => {
   const showId = useParams().id;
   const [tickets, setTickets] = useState([]);
+  const [change, setChange] = useState(false);
   //   const [rows, setRows] = useState(0);
   //   const [places, setPlaces] = useState(0);
 
@@ -23,16 +24,17 @@ export const TicketsPage = () => {
           Authorization: `user ${token}`,
         }
       );
+      setChange(false);
       setTickets(fetched.tickets);
       console.log(fetched.tickets);
     } catch (e) {}
-  }, [request, token, showId, setTickets]);
+  }, [request, token, showId, setTickets, change]);
 
   useEffect(() => {
     fetchTickets();
   }, [fetchTickets]);
 
   return tickets.map((e) => {
-    return <Seat>{e}</Seat>;
+    return <Seat>{{ ticket: e, setChange }}</Seat>;
   });
 };

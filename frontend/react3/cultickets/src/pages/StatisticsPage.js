@@ -4,24 +4,29 @@ import { AuthContext } from "../context/AuthContext";
 import { LineChart, Line, XAxis, YAxis } from "recharts";
 
 export const StatisticsPage = () => {
-  const [shows, setShows] = useState([]);
+  const [genre, setGenre] = useState([]);
+  const [stats, setStats] = useState([]);
   const { token, userId } = useContext(AuthContext);
   const { loading, request } = useHttp();
-  const data = [
-    { name: "January", uv: 40 },
-    { name: "February", uv: 0 },
-    { name: "March", uv: 0 },
-    { name: "April", uv: 20 },
-    { name: "May", uv: 15 },
-    { name: "June", uv: 0 },
-    { name: "July", uv: 0 },
-    { name: "August", uv: 0 },
-    { name: "September", uv: 40 },
-    { name: "October", uv: 0 },
-    { name: "November", uv: 0 },
-    { name: "December", uv: 0 },
-  ];
+  const fetchShows = useCallback(async () => {
+    try {
+      const fetched = await request(`/user/${userId}/stats`, "GET", null, {
+        Authorization: `user ${token}`,
+      });
+      setGenre(fetched.info);
+      setStats(fetched.exps);
+      console.log("Stats", genre, stats);
+    } catch (e) {}
+  }, [request, token, setGenre, setStats, userId]);
 
+  useEffect(() => {
+    fetchShows();
+  }, [fetchShows]);
+
+  const data = stats.map((e) => {
+    return { name: e.month, uv: e.price / 100 };
+  });
+  const genresString = genre.map((e) => e.name + " ");
   return (
     <div className="card">
       <div class="card-body">
@@ -34,26 +39,7 @@ export const StatisticsPage = () => {
         <XAxis dataKey="name" />
         <YAxis />
       </LineChart>
-      <h5 className="text-success">
-        The most popular genres: Romantic, Comedy.
-      </h5>
+      <h5 className="text-success">The most popular genres: {genresString}</h5>
     </div>
   );
-  //   const fetchShows = useCallback(async () => {
-  //     try {
-  //       const fetched = await request(
-  //         `/shows/userId=${userId}&theatreId=0&genreId=0`,
-  //         "GET",
-  //         null,
-  //         {
-  //           Authorization: `user ${token}`,
-  //         }
-  //       );
-  //       setShows(fetched.shows);
-  //     } catch (e) {}
-  //   }, [request, token, setShows, userId]);
-
-  //   useEffect(() => {
-  //     fetchShows();
-  //   }, [fetchShows]);
 };

@@ -3,7 +3,7 @@ import { useHttp } from "../hooks/http.hook";
 import { AuthContext } from "../context/AuthContext";
 
 export const Seat = ({children}) => {
-    const ticket = children;
+    const {ticket, setChange} = children;
     const { token, userId } = useContext(AuthContext);
     const { loading, request } = useHttp();
     const id = ticket.id;
@@ -15,8 +15,9 @@ export const Seat = ({children}) => {
             null,
             { Authorization: `user ${token}` }
           );
+          setChange(true);
         } catch (e) {}
-      }, [request, token, id, userId]);
+      }, [request, token, id, userId, setChange]);
 
     return <>
         <div className="card">

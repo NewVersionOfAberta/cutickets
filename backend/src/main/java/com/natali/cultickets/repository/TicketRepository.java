@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -86,7 +87,7 @@ public class TicketRepository  {
         Connection connection = config.getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement(
                 "select t.t_id, t.t_price, ts.ts_name, se.se_number, se.se_row, " +
-                        "sec.sec_name, h.h_name, th.t_name from sold_ticket as st " +
+                        "sec.sec_name, h.h_name, th.t_name, ss.ss_time from sold_ticket as st " +
                         "left join ticket as t on t.t_id = st.st_ticket_id " +
                         "left join scheduled_show as ss on ss.ss_id = t.t_scheduled_show_id " +
                         "left join ticket_status as ts on ts.ts_id = t.t_ticket_status_id " +
@@ -103,6 +104,7 @@ public class TicketRepository  {
         while (resultSet.next()) {
             Ticket ticket = new Ticket();
             Seat seat = new Seat();
+            Show show = new Show();
             TheaterHall hall = new TheaterHall();
             Sector sector = new Sector();
             Theatre theatre = new Theatre();
@@ -115,11 +117,15 @@ public class TicketRepository  {
             hall.setName(resultSet.getString("h.h_name"));
             theatre.setName(resultSet.getString("th.t_name"));
             ticketStatus.setName(resultSet.getString("ts.ts_name"));
+            LocalDateTime datetime = resultSet.getTimestamp("ss_time").toLocalDateTime();
+            String[] dts = datetime.toString().split("T");
+            show.setDatetime(dts[0] + " " + dts[1]);
             ticket.setSeat(seat);
             ticket.setTheaterHall(hall);
             ticket.setSector(sector);
             ticket.setTheatre(theatre);
             ticket.setTicketStatus(ticketStatus);
+            ticket.setShow(show);
             tickets.add(ticket);
         }
         resultSet.close();

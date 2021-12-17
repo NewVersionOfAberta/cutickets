@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { useHttp } from "../hooks/http.hook";
 import { useMessage } from "../hooks/message.hook";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { Loader } from "../components/Loader";
 
 export const AuthPage = () => {
@@ -23,13 +23,6 @@ export const AuthPage = () => {
     setForm({ ...form, [event.target.name]: event.target.value });
   };
 
-  // const registerHandler = useCallback(async () => {
-  //   try {
-  //     const data = await request("/api/auth/register", "POST", { ...form });
-  //     message(data.message);
-  //   } catch (e) {}
-  // }, [form, message, request]);
-
   const loginHandler = async () => {
     try {
       console.log("Here");
@@ -41,23 +34,17 @@ export const AuthPage = () => {
     }
   };
 
-  // if (loading) {
-  //   return <Loader />;
-  // }
-
   return (
     <div className="row">
       <div className="col s6 offset-s3">
         <h1>Cultickets</h1>
         <div className="card blue-grey lighten-4">
-          <div class="d-flex justify-content-center" >
+          <div class="d-flex justify-content-center">
             <div className="card-content white-text">
-              <h4>
-                Authorization
-              </h4>
+              <h4>Authorization</h4>
               <div className="input-field">
-                 <label htmlFor="Email">Email</label>
-                 <br/>
+                <label htmlFor="Email">Email</label>
+                <br />
                 <input
                   id="login"
                   type="text"
@@ -65,11 +52,10 @@ export const AuthPage = () => {
                   value={form.login}
                   onChange={changeHandler}
                 />
-                
               </div>
               <div className="input-field">
                 <label htmlFor="Password">Password</label>
-                <br/>
+                <br />
                 <input
                   id="password"
                   type="password"
@@ -78,12 +64,18 @@ export const AuthPage = () => {
                   value={form.password}
                   onChange={changeHandler}
                 />
-                
               </div>
-              <div className="card-action" class="d-flex justify-content-around">
-                <button className="btn yellow darken-4" onClick={loginHandler}>
+              <div
+                className="card-action"
+                class="d-flex justify-content-around"
+              >
+                <Link
+                  className="btn yellow darken-4"
+                  onClick={loginHandler}
+                  to="/shows"
+                >
                   Sign in
-                </button>
+                </Link>
                 <Link
                   className="btn grey lighten-1 black-text"
                   to="/registration"
@@ -93,7 +85,7 @@ export const AuthPage = () => {
                 </Link>
               </div>
             </div>
-          </div>          
+          </div>
         </div>
       </div>
     </div>

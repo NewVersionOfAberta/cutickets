@@ -30,9 +30,9 @@ export const Navbar = () => {
         <LinkContainer className={`nav-link ${isActive[2] ? "active" : ""}`} to="/" onClick={logoutHandler}>
           <NavItem eventkey={3}>Log out</NavItem>
         </LinkContainer>
-        <LinkContainer className={`nav-link ${isActive[3] ? "active" : ""}`} to="/admin">
+      { (auth.roles.map((value) => value.authority).includes("ADMIN")) ? <LinkContainer className={`nav-link ${isActive[3] ? "active" : ""}`} to="/admin">
           <NavItem eventkey={4}>Admin</NavItem>
-        </LinkContainer>
+        </LinkContainer> : <></>}
     </Nav>
   );
 };

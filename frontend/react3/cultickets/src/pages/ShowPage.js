@@ -26,12 +26,7 @@ export const ShowPage = () => {
   useEffect(() => {
     fetchShows();
   }, [fetchShows]);
-
-  // const deadlineContext = { deadlines: deadlines, fetch: fetchDeadlines };
-
-  // if (loading) {
-  //     return <Loader />;
-  // }
+  console.log("Shows", shows);
   return shows.map((e) => (
     <>
       <div key={e.id} className="card">
@@ -44,7 +39,12 @@ export const ShowPage = () => {
         </div>
       </div>
       <div className="card-body">
-        <p className="card-text">{e.description}</p>
+        <h5 className="card-text">{e.description}</h5>
+        <p className="card-text">{`Theatre: ${e.theatre.name}.`}</p>
+        <h6 className="text-success">{`${e.ageRating.name}`}</h6>
+        <h6 className="text-success">{`Genres: ${e.genre.map(
+          (e) => " " + e.name
+        )}`}</h6>
         <NavLink
           className="btn btn-warning book"
           to={`/scheduled-show/${e.id}`}

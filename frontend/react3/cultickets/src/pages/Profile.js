@@ -7,6 +7,7 @@ import { NavLink, useParams } from "react-router-dom";
 export const Profile = () => {
   const [profileInfo, setProfileInfo] = useState();
   const [tickets, setTickets] = useState();
+  const [change, setChange] = useState(false);
   const { token, userId } = useContext(AuthContext);
   const { request } = useHttp();
 
@@ -15,8 +16,7 @@ export const Profile = () => {
       const fetched = await request(`/user/${userId}`, "GET", null, {
         Authorization: `user ${token}`,
       });
-      console.log("Profile", fetched.info);
-
+      setChange(false);
       setProfileInfo(fetched.info);
     } catch (e) {}
   }, [userId, setProfileInfo, token]);
@@ -34,11 +34,10 @@ export const Profile = () => {
   useEffect(() => {
     fetchTickets();
     fetchProfileInfo();
-  }, [fetchTickets, fetchProfileInfo]);
+  }, [fetchTickets, fetchProfileInfo, change]);
   if (tickets && profileInfo) {
-    console.log("profileInfo", profileInfo);
     const soldTickets = tickets.map((e) => {
-      return <SoldTicket>{e}</SoldTicket>;
+      return <SoldTicket>{{ ticket: e, setChange }}</SoldTicket>;
     });
 
     return (
