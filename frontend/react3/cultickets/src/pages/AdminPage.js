@@ -1,8 +1,6 @@
 import React, { useEffect, useState, useContext, useCallback } from "react";
 import { useHttp } from "../hooks/http.hook";
 import { AuthContext } from "../context/AuthContext";
-import { Loader } from "../components/Loader";
-import { NavLink } from "react-router-dom";
 
 export const AdminPage = () => {
   const [users, setUsers] = useState([]);

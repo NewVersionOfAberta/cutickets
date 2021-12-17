@@ -18,9 +18,9 @@ public class TheatreServiceImpl implements TheatreService {
     private final TheatreMapper theatreMapper;
 
     @Autowired
-    public TheatreServiceImpl(TheatreRepository theatreRepository, TheatreMapper theaterMapper) {
+    public TheatreServiceImpl(TheatreRepository theatreRepository, TheatreMapper theatreMapper) {
         this.theaterRepository = theatreRepository;
-        this.theatreMapper = theaterMapper;
+        this.theatreMapper = theatreMapper;
     }
 
     public TheatreDto findTheater(int theaterId) {
