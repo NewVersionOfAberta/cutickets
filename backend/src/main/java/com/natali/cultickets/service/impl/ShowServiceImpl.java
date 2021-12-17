@@ -3,6 +3,7 @@ package com.natali.cultickets.service.impl;
 import com.natali.cultickets.dto.ShowDto;
 import com.natali.cultickets.mapstruct.ShowMapper;
 import com.natali.cultickets.model.Show;
+import com.natali.cultickets.repository.JournalRepository;
 import com.natali.cultickets.repository.ShowRepository;
 import com.natali.cultickets.service.GenreService;
 import com.natali.cultickets.service.ShowService;
@@ -17,17 +18,19 @@ import java.util.stream.Collectors;
 @Service
 public class ShowServiceImpl implements ShowService {
     private final ShowRepository showRepository;
+    private final JournalRepository journalRepository;
     private final ShowMapper showMapper;
     private final TheatreService theaterService;
     private final GenreService genreService;
 
     @Autowired
     public ShowServiceImpl(ShowRepository showRepository, ShowMapper showMapper, TheatreService theaterService,
-                           GenreService genreService) {
+                           GenreService genreService, JournalRepository journalRepository) {
         this.showRepository = showRepository;
         this.showMapper = showMapper;
         this.theaterService = theaterService;
         this.genreService = genreService;
+        this.journalRepository = journalRepository;
     }
 
 //    public void updateShow(ShowDto showDto) {
@@ -57,17 +60,21 @@ public class ShowServiceImpl implements ShowService {
 //    }
 
     @Override
-    public List<ShowDto> findShows(int theaterId, int showTypeId, int userId) {
+    public List<ShowDto> findShows(int user_id, int theaterId, int showTypeId, int userId) {
         if (theaterId == 0 && showTypeId == 0 && userId == 0) {
-            return getAllShows();
+            journalRepository.write(user_id, "show", null, null, JournalRepository.Operation.READ);
+            return findAll();
         }
         else if(theaterId == 0 && showTypeId == 0) {
+            journalRepository.write(user_id, "show", "sh_theatre_id", null, JournalRepository.Operation.READ);
+
             return findSuitableForUser(userId);
         }
+        else if (showTypeId == 0 && userId == 0) {
+            return getByTheatre(user_id, theaterId);
+        }
         return null;
-//        else if (showTypeId == 0) {
-//            return getShowsByTheater(theaterId);
-//        } else if (theaterId == 0) {
+//        else if (theaterId == 0) {
 //            return getShowsByType(showTypeId);
 //        } else {
 //            return getShowsByTheaterAndType(theaterId, showTypeId);
@@ -80,14 +87,14 @@ public class ShowServiceImpl implements ShowService {
 //                .orElseThrow(() -> new ServiceException("There are no such show"));
 //        this.showRepository.delete(show);
 //    }
-//
-    public List<ShowDto> getAllShows() {
+
+    public List<ShowDto> findAll() {
         List<Show> allShows = null;
-//        try {
-//            allShows = this.showRepository.findAll();
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
+        try {
+            allShows = this.showRepository.findAll();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return allShows.stream()
                 .map(this.showMapper::showToShowDto)
                 .collect(Collectors.toList());
@@ -107,7 +114,7 @@ public class ShowServiceImpl implements ShowService {
     }
 
     @Override
-    public List<ShowDto> findScheduledShowsByShow(int showId) {
+    public List<ShowDto> findScheduledShowsByShow(int userId, int showId) {
         List<Show> allShows = null;
         try {
             allShows = this.showRepository.findScheduledShowsByShow(showId);
@@ -120,7 +127,7 @@ public class ShowServiceImpl implements ShowService {
     }
 
     @Override
-    public ShowDto getShowInfo(int showId) {
+    public ShowDto getShowInfo(int userId, int showId) {
         Show show = null;
         try {
             show = this.showRepository.getShowInfo(showId);
@@ -131,7 +138,7 @@ public class ShowServiceImpl implements ShowService {
     }
 
     @Override
-    public List<ShowDto> getByTheatre(int id) {
+    public List<ShowDto> getByTheatre(int userId, int id) {
         List<Show> allShows = null;
         try {
             allShows = this.showRepository.getByTheatre(id);

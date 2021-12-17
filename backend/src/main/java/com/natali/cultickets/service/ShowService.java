@@ -11,15 +11,17 @@ public interface ShowService {
 //
 //    Show saveShow(ShowDto showDto);
 //
-    List<ShowDto> findShows(int theaterId, int typeId, int userId);
+    List<ShowDto> findShows(int user_id, int theaterId, int typeId, int userId);
 
     List<ShowDto> findSuitableForUser(int id);
 
-    List<ShowDto> findScheduledShowsByShow(int showId);
+    List<ShowDto> findScheduledShowsByShow(int userId, int showId);
 
-    ShowDto getShowInfo(int showId);
+    ShowDto getShowInfo(int userId, int showId);
 
-    List<ShowDto> getByTheatre(int id);
+    List<ShowDto> getByTheatre(int userId, int id);
+
+    List<ShowDto> findAll();
 //
 //    void deleteShow(ShowDto showDto);
 }

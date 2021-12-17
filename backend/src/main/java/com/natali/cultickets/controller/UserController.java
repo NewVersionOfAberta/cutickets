@@ -3,6 +3,7 @@ package com.natali.cultickets.controller;
 
 import com.natali.cultickets.dto.*;
 import com.natali.cultickets.mapstruct.UserMapper;
+import com.natali.cultickets.model.AuthInfo;
 import com.natali.cultickets.model.Genre;
 import com.natali.cultickets.model.User;
 import com.natali.cultickets.service.TicketService;
@@ -19,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
