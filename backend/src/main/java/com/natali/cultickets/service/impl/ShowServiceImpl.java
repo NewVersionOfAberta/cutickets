@@ -6,7 +6,7 @@ import com.natali.cultickets.model.Show;
 import com.natali.cultickets.repository.ShowRepository;
 import com.natali.cultickets.service.GenreService;
 import com.natali.cultickets.service.ShowService;
-import com.natali.cultickets.service.TheaterService;
+import com.natali.cultickets.service.TheatreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,11 +18,11 @@ import java.util.stream.Collectors;
 public class ShowServiceImpl implements ShowService {
     private final ShowRepository showRepository;
     private final ShowMapper showMapper;
-    private final TheaterService theaterService;
+    private final TheatreService theaterService;
     private final GenreService genreService;
 
     @Autowired
-    public ShowServiceImpl(ShowRepository showRepository, ShowMapper showMapper, TheaterService theaterService,
+    public ShowServiceImpl(ShowRepository showRepository, ShowMapper showMapper, TheatreService theaterService,
                            GenreService genreService) {
         this.showRepository = showRepository;
         this.showMapper = showMapper;
@@ -128,6 +128,19 @@ public class ShowServiceImpl implements ShowService {
             e.printStackTrace();
         }
         return showMapper.showToShowDto(show);
+    }
+
+    @Override
+    public List<ShowDto> getByTheatre(int id) {
+        List<Show> allShows = null;
+        try {
+            allShows = this.showRepository.getByTheatre(id);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return allShows.stream()
+                .map(this.showMapper::showToShowDto)
+                .collect(Collectors.toList());
     }
 
 

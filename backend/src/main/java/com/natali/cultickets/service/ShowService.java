@@ -18,6 +18,8 @@ public interface ShowService {
     List<ShowDto> findScheduledShowsByShow(int showId);
 
     ShowDto getShowInfo(int showId);
+
+    List<ShowDto> getByTheatre(int id);
 //
 //    void deleteShow(ShowDto showDto);
 }
