@@ -21,7 +21,7 @@ export const TicketsPage = () => {
         "GET",
         null,
         {
-          Authorization: `user ${token}`,
+          Authorization: `Bearer ${token}`,
         }
       );
       setChange(false);

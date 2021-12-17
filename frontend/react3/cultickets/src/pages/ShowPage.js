@@ -16,7 +16,7 @@ export const ShowPage = () => {
         "GET",
         null,
         {
-          Authorization: `user ${token}`,
+          Authorization: `Bearer ${token}`,
         }
       );
       setShows(fetched.shows);

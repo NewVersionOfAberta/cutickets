@@ -13,7 +13,7 @@ export const SoldTicket = ({children}) => {
             `/user/tickets/return/user=${userId}&ticket=${id}`,
             "Get",
             null,
-            { Authorization: `user ${token}` }
+            { Authorization: `Bearer ${token}` }
           );
           setChange(true);
         } catch (e) {}

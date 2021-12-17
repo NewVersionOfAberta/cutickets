@@ -12,7 +12,7 @@ export const AdminPage = () => {
   const fetchShows = useCallback(async () => {
     try {
       const fetched = await request(`/admin/users`, "GET", null, {
-        Authorization: `user ${token}`,
+        Authorization: `Bearer ${token}`,
       });
       setUsers(fetched.users.sort((u1, u2) => u1.id - u2.id));
     } catch (e) {}
@@ -24,14 +24,14 @@ export const AdminPage = () => {
 
   const activate = async (user) => {
     await request(`/admin/users/activate`, "POST", user, {
-      Authorization: `user ${token}`,
+      Authorization: `Bearer ${token}`,
     });
     fetchShows();
   };
 
   const disable = async (user) => {
     await request(`/admin/users/disable`, "POST", user, {
-      Authorization: `user ${token}`,
+      Authorization: `Bearer ${token}`,
     });
     fetchShows();
   };

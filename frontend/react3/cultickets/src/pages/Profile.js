@@ -14,7 +14,7 @@ export const Profile = () => {
   const fetchProfileInfo = useCallback(async () => {
     try {
       const fetched = await request(`/user/${userId}`, "GET", null, {
-        Authorization: `user ${token}`,
+        Authorization: `Bearer ${token}`,
       });
       setChange(false);
       setProfileInfo(fetched.info);
@@ -24,7 +24,7 @@ export const Profile = () => {
   const fetchTickets = useCallback(async () => {
     try {
       const fetched = await request(`/user/tickets/${userId}`, "GET", null, {
-        Authorization: `user ${token}`,
+        Authorization: `Bearer ${token}`,
       });
 
       setTickets(fetched.tickets);

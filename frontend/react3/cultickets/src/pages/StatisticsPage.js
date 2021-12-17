@@ -11,7 +11,7 @@ export const StatisticsPage = () => {
   const fetchShows = useCallback(async () => {
     try {
       const fetched = await request(`/user/${userId}/stats`, "GET", null, {
-        Authorization: `user ${token}`,
+        Authorization: `Bearer ${token}`,
       });
       setGenre(fetched.info);
       setStats(fetched.exps);

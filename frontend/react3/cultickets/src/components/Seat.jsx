@@ -13,7 +13,7 @@ export const Seat = ({children}) => {
             `/tickets/scheduledShow/${userId}/${id}`,
             "GET",
             null,
-            { Authorization: `user ${token}` }
+            { Authorization: `Bearer ${token}` }
           );
           setChange(true);
         } catch (e) {}

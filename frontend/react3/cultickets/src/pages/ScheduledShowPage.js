@@ -13,7 +13,7 @@ export const ScheduledShowPage = () => {
   const fetchShows = useCallback(async () => {
     try {
       const fetched = await request(`/shows/showId=${showId}`, "GET", null, {
-        Authorization: `user ${token}`,
+        Authorization: `Bearer ${token}`,
       });
       console.log("Show schedule", fetched);
 
