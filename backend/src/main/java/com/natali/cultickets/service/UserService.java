@@ -4,6 +4,7 @@ import com.natali.cultickets.dto.ExpensesDto;
 import com.natali.cultickets.dto.GenreDto;
 import com.natali.cultickets.dto.UserDto;
 import com.natali.cultickets.dto.UserPostDto;
+import com.natali.cultickets.model.AuthInfo;
 import com.natali.cultickets.model.Expenses;
 import com.natali.cultickets.model.Genre;
 import com.natali.cultickets.model.User;
@@ -27,4 +28,5 @@ public interface UserService {
     UserDto getUserInfo(int userId);
     List<GenreDto> getPreferableGenres(int userId);
     List<ExpensesDto> getUserExpenses(int userId);
+    AuthInfo findByLogin(String login);
 }

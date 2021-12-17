@@ -6,6 +6,7 @@ import com.natali.cultickets.dto.UserDto;
 import com.natali.cultickets.mapstruct.ExpensesMapper;
 import com.natali.cultickets.mapstruct.GenreMapper;
 import com.natali.cultickets.mapstruct.UserMapper;
+import com.natali.cultickets.model.AuthInfo;
 import com.natali.cultickets.model.Genre;
 import com.natali.cultickets.repository.UserRepository;
 import com.natali.cultickets.service.UserService;
@@ -107,6 +108,16 @@ public class UserServiceImpl implements UserService {
             return userRepository.getUserExpenses(userId).stream()
                     .map(this.expensesMapper::expsToexpsDto)
                     .collect(Collectors.toList());
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public AuthInfo findByLogin(String login) {
+        try {
+            return userRepository.findUserByLogin(login);
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
