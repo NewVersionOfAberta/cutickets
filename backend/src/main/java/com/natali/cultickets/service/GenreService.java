@@ -9,5 +9,5 @@ import java.util.Optional;
 public interface GenreService {
     Optional<Genre> findShowType(int showTypeId);
 
-    List<GenreDto> findAll();
+    List<GenreDto> findAll(int userId);
 }
