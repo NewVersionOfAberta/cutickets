@@ -7,6 +7,7 @@ import { ScheduledShowPage } from "./pages/ScheduledShowPage";
 import { Profile } from "./pages/Profile";
 import { StatisticsPage } from "./pages/StatisticsPage";
 import { AdminPage } from "./pages/AdminPage";
+import { JornalPage } from "./pages/JornalPage";
 
 export const useRoutes = (isAuthentificated, roles) => {
   if (isAuthentificated) {
@@ -25,6 +26,7 @@ export const useRoutes = (isAuthentificated, roles) => {
           <Route path="/profile" exact element={<Profile />}></Route>
           <Route path="/statistics" exact element={<StatisticsPage />}></Route>
           <Route path="/admin" exact element={<AdminPage />}></Route>
+          <Route path="/jornal" exact element={<JornalPage />}></Route>
           {/* <Navigate to={"/shows"} /> */}
         </Routes>
       );

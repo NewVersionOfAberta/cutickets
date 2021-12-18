@@ -48,24 +48,6 @@ public class ShowsController {
         this.userService = userService;
     }
 
-    @GetMapping("/filters")
-    ResponseEntity<Map<String, Object>> getShowFilters() {
-        ResponseEntity<Map<String, Object>> responseEntity;
-        Map<String, Object> responseData = new HashMap<>();
-        try {
-//            List<ShowTypeDto> showTypes = this.showTypeService.findAll();
-//            List<TheaterDto> theaters = this.theaterService.findAll();
-//            responseData.put("theaters", theaters);
-//            responseData.put("showTypes", showTypes);
-            responseEntity = new ResponseEntity<>(responseData, HttpStatus.OK);
-        } catch (Exception e) {
-            responseData.put("message", "Failed to get filters.");
-            responseEntity = new ResponseEntity<>(responseData, HttpStatus.INTERNAL_SERVER_ERROR);
-            log.error("Failed to get filters.", e);
-        }
-        return responseEntity;
-    }
-
     @GetMapping("/theater")
 //    ResponseEntity<Map<String, List<ShowDto>>> getShows(@PathVariable int theaterId, @PathVariable int showTypeId) {
     ResponseEntity<Map<String, List<ShowDto>>> getShows() {

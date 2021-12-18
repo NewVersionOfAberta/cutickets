@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useContext, useCallback } from "react";
 import { useHttp } from "../hooks/http.hook";
 import { AuthContext } from "../context/AuthContext";
+import { NavLink } from "react-router-dom";
 
 export const AdminPage = () => {
   const [users, setUsers] = useState([]);
@@ -34,7 +35,7 @@ export const AdminPage = () => {
     fetchShows();
   };
 
-  return users.map((e) => (
+  const userList = users.map((e) => (
     <>
       <div key={e.id} className="card">
         <div className="card-header">
@@ -60,5 +61,13 @@ export const AdminPage = () => {
       </div>
     </>
   ));
+  return (
+    <>
+      <NavLink className="btn btn-info mb-3" to="/jornal">
+        View Jornal
+      </NavLink>
+      {userList}
+    </>
+  );
   //   return showList;
 };
