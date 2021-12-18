@@ -39,10 +39,11 @@ public class GenreRepository {
     public Genre findById(int genreId) throws SQLException {
         Connection connection = config.getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement(
-                "select g_name from genre where g.g_id = ?");
+                "select g_id, g_name from genre where g_id = ?");
         preparedStatement.setInt(1, genreId);
         ResultSet resultSet = preparedStatement.executeQuery();
         Genre genre = new Genre();
+        genre.setId(resultSet.getInt("g_id"));
         genre.setName(resultSet.getString("g_name"));
         resultSet.close();
         return genre;
