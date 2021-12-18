@@ -23,7 +23,6 @@ export const StatisticsPage = () => {
         if (parseInt(a.month) < parseInt(b.month)) {
           return -1;
         }
-        // a должно быть равным b
         return 0;
       });
       console.log("sorted", exp);

@@ -29,13 +29,14 @@ export const SoldTicket = ({children}) => {
 //   private ShowDto show;
 //   private TicketStatusDto ticketStatus;
 // }
+      console.log("Ticket", ticket);
     return <>
         <div className="card">
         <div className="card-header">
         <div className="container">
           <div className="row">
             <span className="col text-secondary">
-            {ticket.showName}
+            {ticket.show.name}
             </span>
             </div>
           </div>
@@ -43,9 +44,13 @@ export const SoldTicket = ({children}) => {
         </div>
         <div className="card-body">
           <ul>
+            <li>Theatre: {ticket.theatre.name}</li>
+            <li>Hall: {ticket.theaterHall.name}</li>
+            <li>Sector: {ticket.sector.name}</li>
             <li>Row: {ticket.seat.row}</li>
             <li>Number: {ticket.seat.number}</li>
             <li>Status: {ticket.ticketStatus.name}</li>
+            
             <li>Date: {ticket.show.datetime}</li>
             <li>Price: {ticket.price / 100} $</li>
           </ul>
