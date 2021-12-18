@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface GenreService {
-    Optional<Genre> findShowType(int showTypeId);
+    Genre findById(int genreId);
 
     List<GenreDto> findAll(int userId);
 }

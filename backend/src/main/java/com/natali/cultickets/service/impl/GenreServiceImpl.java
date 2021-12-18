@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -34,14 +35,24 @@ public class GenreServiceImpl implements GenreService {
     }
 
     @Override
-    public Optional<Genre> findShowType(int showTypeId) {
-        return this.genreRepository.findById(showTypeId);
+    public Genre findById(int genreId) {
+        try {
+            return this.genreRepository.findById(genreId);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @Override
     public List<GenreDto> findAll(int userId) {
-        List<Genre> showTypes = this.genreRepository.findAll();
-        journalRepository.write(userId, "genre", null, null, JournalRepository.Operation.READ);
+        List<Genre> showTypes = null;
+        try {
+            journalRepository.write(userId, "genre", null, null, JournalRepository.Operation.READ);
+            showTypes = this.genreRepository.findAll();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return showTypes.stream()
                 .map(this.utilsMapper::genreToGenreDto)
                 .collect(Collectors.toList());

@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class JournalDto {
     private int id;
-    private int userId;
+    private String login;
     private String userName;
     private String time;
     private String table;

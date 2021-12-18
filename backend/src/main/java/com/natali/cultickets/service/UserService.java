@@ -1,9 +1,6 @@
 package com.natali.cultickets.service;
 
-import com.natali.cultickets.dto.ExpensesDto;
-import com.natali.cultickets.dto.GenreDto;
-import com.natali.cultickets.dto.UserDto;
-import com.natali.cultickets.dto.UserPostDto;
+import com.natali.cultickets.dto.*;
 import com.natali.cultickets.model.AuthInfo;
 import com.natali.cultickets.model.Expenses;
 import com.natali.cultickets.model.Genre;
@@ -29,4 +26,5 @@ public interface UserService {
     List<GenreDto> getPreferableGenres(int userId);
     List<ExpensesDto> getUserExpenses(int userId);
     AuthInfo findByLogin(String login);
+    List<JournalDto> getJournalInfo(int userId);
 }

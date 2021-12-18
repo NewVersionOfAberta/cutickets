@@ -40,6 +40,7 @@ export const ShowPage = () => {
 
   const fetchSuitableShows = useCallback(async () => {
     try {
+      console.log("Find suitable");
       const fetched = await request(
         `/shows/userId=${userId}&theatreId=0&genreId=0`,
         "GET",
@@ -75,6 +76,7 @@ export const ShowPage = () => {
     async (e) => {
       try {
         const { name, value } = e.target;
+        console.log("Genre:", name, value);
         setGenre({ id: value, name });
         const fetched = await request(
           `/shows/userId=0&theatreId=0&genreId=${value}`,
@@ -87,7 +89,7 @@ export const ShowPage = () => {
         setShows(fetched.shows);
       } catch (e) {}
     },
-    [request, token, setShows, userId]
+    [request, token, setShows, userId, setGenre]
   );
 
   useEffect(() => {
@@ -95,14 +97,12 @@ export const ShowPage = () => {
     fetchSuitableShows();
   }, [fetchSuitableShows, fetchAllTheatres]);
 
-  console.log("theatres", theatres);
-  console.log("shows", shows);
   let theatresList;
   if (theatres) {
     theatresList = theatres.map((e) => <option value={e.id}>{e.name}</option>);
   }
   let genresList;
-  console.log(genres);
+
   if (genres) {
     genresList = genres.map((e) => <option value={e.id}>{e.name}</option>);
   }
