@@ -6,6 +6,7 @@ import com.natali.cultickets.model.Genre;
 import com.natali.cultickets.model.Show;
 import com.natali.cultickets.repository.JournalRepository;
 import com.natali.cultickets.repository.ShowRepository;
+import com.natali.cultickets.repository.UserRepository;
 import com.natali.cultickets.service.GenreService;
 import com.natali.cultickets.service.ShowService;
 import com.natali.cultickets.service.TheatreService;
@@ -24,15 +25,17 @@ public class ShowServiceImpl implements ShowService {
     private final ShowMapper showMapper;
     private final TheatreService theaterService;
     private final GenreService genreService;
+    private final UserRepository userRepository;
 
     @Autowired
     public ShowServiceImpl(ShowRepository showRepository, ShowMapper showMapper, TheatreService theaterService,
-                           GenreService genreService, JournalRepository journalRepository) {
+                           GenreService genreService, JournalRepository journalRepository, UserRepository userRepository) {
         this.showRepository = showRepository;
         this.showMapper = showMapper;
         this.theaterService = theaterService;
         this.genreService = genreService;
         this.journalRepository = journalRepository;
+        this.userRepository = userRepository;
     }
 
 //    public void updateShow(ShowDto showDto) {
@@ -62,21 +65,35 @@ public class ShowServiceImpl implements ShowService {
 //    }
 
     @Override
-    public List<ShowDto> findShows(int user_id, int theaterId, int showTypeId, int userId) {
-        if (theaterId == 0 && showTypeId == 0 && userId == 0) {
+    public List<ShowDto> findShows(int user_id, int theaterId, int genreId, int userId) {
+        if (theaterId == 0 && genreId == 0 && userId == 0) {
             journalRepository.write(user_id, "show", null, null, JournalRepository.Operation.READ);
             return findAll();
         }
-        else if(theaterId == 0 && showTypeId == 0) {
-            journalRepository.write(user_id, "show", "sh_theatre_id", null, JournalRepository.Operation.READ);
-
+        else if(theaterId == 0 && genreId == 0) {
+            journalRepository.write(user_id, "show", "sh_theatre_id",
+                    null, JournalRepository.Operation.READ);
+            journalRepository.write(user_id, "theatre", "t_address_id",
+                    null, JournalRepository.Operation.READ);
+            journalRepository.write(user_id, "address", "add_city_id",
+                    null, JournalRepository.Operation.READ);
+            journalRepository.write(user_id, "city", "c_name",
+                    String.valueOf(userRepository.findCityId(userId)), JournalRepository.Operation.READ);
             return findSuitableForUser(userId);
         }
-        else if (showTypeId == 0 && userId == 0) {
+        else if (genreId == 0 && userId == 0) {
+            journalRepository.write(user_id, "show", "sh_theatre_id",
+                    null, JournalRepository.Operation.READ);
+            journalRepository.write(user_id, "theatre", "t_id",
+                    String.valueOf(theaterId), JournalRepository.Operation.READ);
             return getByTheatre(user_id, theaterId);
         }
         else if (theaterId == 0 && userId == 0) {
-            return findByGenre(showTypeId);
+            journalRepository.write(user_id, "mtm_show_genre", "mtm_genre_id",
+                    String.valueOf(genreId), JournalRepository.Operation.READ);
+            journalRepository.write(user_id, "theatre", "t_id",
+                    String.valueOf(theaterId), JournalRepository.Operation.READ);
+            return findByGenre(genreId);
         }
         return null;
     }
@@ -117,6 +134,8 @@ public class ShowServiceImpl implements ShowService {
     public List<ShowDto> findScheduledShowsByShow(int userId, int showId) {
         List<Show> allShows = null;
         try {
+            journalRepository.write(userId, "scheduled_show", "ss_show_id",
+                    String.valueOf(showId), JournalRepository.Operation.READ);
             allShows = this.showRepository.findScheduledShowsByShow(showId);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -130,6 +149,8 @@ public class ShowServiceImpl implements ShowService {
     public ShowDto getShowInfo(int userId, int showId) {
         Show show = null;
         try {
+            journalRepository.write(userId, "show", "sh_id",
+                    String.valueOf(showId), JournalRepository.Operation.READ);
             show = this.showRepository.getShowInfo(showId);
         } catch (SQLException e) {
             e.printStackTrace();

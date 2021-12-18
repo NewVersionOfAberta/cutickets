@@ -5,7 +5,7 @@ import com.natali.cultickets.dto.TheatreDto;
 import java.util.List;
 
 public interface TheatreService {
-    TheatreDto findTheater(int theaterId);
+    TheatreDto findTheater(int userId, int theaterId);
 
-    List<TheatreDto> findAll();
+    List<TheatreDto> findAll(int userId);
 }

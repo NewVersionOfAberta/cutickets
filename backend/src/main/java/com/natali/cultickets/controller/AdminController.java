@@ -2,6 +2,7 @@ package com.natali.cultickets.controller;
 
 import com.natali.cultickets.dto.ShowDto;
 import com.natali.cultickets.dto.UserDto;
+import com.natali.cultickets.model.AuthInfo;
 import com.natali.cultickets.service.ShowService;
 //import com.natali.cultickets.service.impl.ShowServiceImpl;
 import com.natali.cultickets.service.impl.UserServiceImpl;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,10 +35,13 @@ public class AdminController {
     }
 
     @GetMapping("/users")
-    ResponseEntity<Map<String, List<UserDto>>> getUsers() {
+    ResponseEntity<Map<String, List<UserDto>>> getUsers(Principal principal) {
+        String login = principal.getName();
+        AuthInfo authInfo = userService.findByLogin(login);
+        int userId = authInfo.getUserId();
 //        try {
             Map<String, List<UserDto>> result = new HashMap<>();
-            result.put("users", userService.getAllUsers());
+            result.put("users", userService.getAllUsers(userId));
             return new ResponseEntity<>(result, HttpStatus.CREATED);
 //        } catch (Exception e) {
 //            responseEntity = new ResponseEntity<>("Failed to create show.", HttpStatus.INTERNAL_SERVER_ERROR);
@@ -46,17 +51,27 @@ public class AdminController {
     }
 
     @PostMapping("/users/disable")
-    void disableUser(@RequestBody UserDto userDto) {
-        userService.disableUser(userDto);
+    void disableUser(@RequestBody UserDto userDto, Principal principal) {
+        String login = principal.getName();
+        AuthInfo authInfo = userService.findByLogin(login);
+        int userId = authInfo.getUserId();
+        userService.disableUser(userId, userDto);
     }
 
     @PostMapping("/users/activate")
-    void activateUser(@RequestBody UserDto userDto) {
-        userService.activateUser(userDto);
+    void activateUser(@RequestBody UserDto userDto, Principal principal) {
+        String login = principal.getName();
+        AuthInfo authInfo = userService.findByLogin(login);
+        int userId = authInfo.getUserId();
+        userService.activateUser(userId, userDto);
     }
 
     @PostMapping("/show/submit")
-    ResponseEntity<String> submitShow(@RequestBody ShowDto showDto) {
+    ResponseEntity<String> submitShow(@RequestBody ShowDto showDto, Principal principal) {
+        String login = principal.getName();
+        AuthInfo authInfo = userService.findByLogin(login);
+        int userId = authInfo.getUserId();
+
         ResponseEntity<String> responseEntity;
         try {
 //            this.showService.saveShow(showDto);
@@ -69,7 +84,11 @@ public class AdminController {
     }
 
     @PutMapping("/show/update")
-    ResponseEntity<String> updateShow(@RequestBody ShowDto showDto) {
+    ResponseEntity<String> updateShow(@RequestBody ShowDto showDto, Principal principal) {
+        String login = principal.getName();
+        AuthInfo authInfo = userService.findByLogin(login);
+        int userId = authInfo.getUserId();
+
         ResponseEntity<String> responseEntity;
         try {
 //            this.showService.updateShow(showDto);
@@ -82,7 +101,11 @@ public class AdminController {
     }
 
     @DeleteMapping("/show/delete")
-    ResponseEntity<String> deleteShow(@RequestBody ShowDto showDto) {
+    ResponseEntity<String> deleteShow(@RequestBody ShowDto showDto, Principal principal) {
+        String login = principal.getName();
+        AuthInfo authInfo = userService.findByLogin(login);
+        int userId = authInfo.getUserId();
+
         ResponseEntity<String> responseEntity;
         try {
 //            this.showService.deleteShow(showDto);

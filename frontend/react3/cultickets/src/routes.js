@@ -1,9 +1,5 @@
 import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
-// import { DeadlinePage } from "./pages/DeadlinePage";
-// import { DetailsPage } from "./pages/DetailsPage";
-// import { RegistrationPage } from "./pages/RegistrationPage";
-// import { CreateDeadlinePage } from "./pages/CreateDeadlinePage";
 import { AuthPage } from "./pages/AuthPage";
 import { ShowPage } from "./pages/ShowPage";
 import { TicketsPage } from "./pages/TicketsPage";
@@ -45,6 +41,8 @@ export const useRoutes = (isAuthentificated, roles) => {
           ></Route>
           <Route path="/tickets/:id" element={<TicketsPage />}></Route>
           <Route path="/profile" exact element={<Profile />}></Route>
+          <Route path="/statistics" exact element={<StatisticsPage />}></Route>
+          <Route path="/admin" exact element={<AdminPage />}></Route>
           {/* <Navigate to={"/shows"} /> */}
         </Routes>
       );

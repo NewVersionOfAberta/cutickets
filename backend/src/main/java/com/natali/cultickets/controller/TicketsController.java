@@ -1,12 +1,16 @@
 package com.natali.cultickets.controller;
 
 import com.natali.cultickets.dto.TicketDto;
+import com.natali.cultickets.model.AuthInfo;
 import com.natali.cultickets.service.TicketService;
 
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.natali.cultickets.service.UserService;
+import com.natali.cultickets.service.impl.UserServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,18 +26,24 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/tickets/")
 public class TicketsController {
     private final TicketService ticketService;
+    private final UserService userService;
 
     @Autowired
-    public TicketsController(TicketService ticketService) {
+    public TicketsController(TicketService ticketService, UserServiceImpl userService) {
         this.ticketService = ticketService;
+        this.userService = userService;
     }
 
     @GetMapping("/scheduledShow/{ssId}")
-    ResponseEntity<Map<String, Object>> getTicketsToTheShow(@PathVariable int ssId) {
+    ResponseEntity<Map<String, Object>> getTicketsToTheShow(@PathVariable int ssId, Principal principal) {
+        String login = principal.getName();
+        AuthInfo authInfo = userService.findByLogin(login);
+        int userId = authInfo.getUserId();
+
         ResponseEntity<Map<String, Object>> responseEntity;
         Map<String, Object> responseData = new HashMap<>();
         try {
-            List<TicketDto> tickets = this.ticketService.findTicketsToShow(ssId);
+            List<TicketDto> tickets = this.ticketService.findTicketsToShow(userId, ssId);
             responseData.put("tickets", tickets);
             responseEntity = new ResponseEntity<>(responseData, HttpStatus.OK);
         } catch (Exception e) {

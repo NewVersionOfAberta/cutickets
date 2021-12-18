@@ -94,6 +94,24 @@ public class UserRepository {
         return authInfo;
     }
 
+    public int findCityId(int userId) {
+        Connection connection = config.getConnection();
+        PreparedStatement preparedStatement = null;
+        try {
+            preparedStatement = connection.prepareStatement(
+                    "select c.c_id from city as c " +
+                            "join address as ad on ad.add_city_id = c.c_id " +
+                            "join user as u on u.u_address_id = ad.add_id " +
+                            "where u.u_id = ?");
+            preparedStatement.setInt(1, userId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            return resultSet.getInt("c_id");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return -1;
+        }
+    }
+
     public Set<Role> getRoles(int userId) throws SQLException {
         Set<Role> roles = new HashSet<>();
         Connection connection = config.getConnection();

@@ -20,11 +20,11 @@ public interface UserService {
 //    Optional<User> findUserByEmail(String email);
 //
 //    User saveUser(UserPostDto userPostDto);
-    List<UserDto> getAllUsers();
-    void disableUser(UserDto user);
-    void activateUser(UserDto userDto);
-    void updateUserStatus(String status);
-    void updateUserAccount(UserDto user);
+    List<UserDto> getAllUsers(int userId);
+    void disableUser(int userId, UserDto user);
+    void activateUser(int userId, UserDto userDto);
+    void updateUserStatus(int userId, String status);
+    void updateUserAccount(int userId, UserDto user);
     UserDto getUserInfo(int userId);
     List<GenreDto> getPreferableGenres(int userId);
     List<ExpensesDto> getUserExpenses(int userId);
