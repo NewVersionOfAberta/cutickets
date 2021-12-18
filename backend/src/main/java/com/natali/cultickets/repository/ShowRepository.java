@@ -18,7 +18,7 @@ public class ShowRepository {
     public List<Show> findAll() throws SQLException {
         Connection connection = config.getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement(
-                "select sh.sh_id, sh.sh_name, sh.sh_description, ar.ar_name, t.t_name, c.name" +
+                "select sh.sh_id, sh.sh_name, sh.sh_description, ar.ar_name, t.t_name, c.c_name" +
                         " from `show` as sh" +
                         " left join age_rating as ar on ar.ar_id = sh.sh_age_rating_id" +
                         " left join theatre as t on t.t_id = sh.sh_theatre_id" +

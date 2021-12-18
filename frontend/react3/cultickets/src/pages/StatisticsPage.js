@@ -22,8 +22,9 @@ export const StatisticsPage = () => {
   useEffect(() => {
     fetchShows();
   }, [fetchShows]);
-  if (!stats) {
-    return <div>No information about this user</div>;
+  if (!stats || stats.length == 0) {
+    console.log("HERE");
+    return <div> No information about this user</div>;
   }
   const data = stats.map((e) => {
     return { name: e.month, uv: e.price / 100 };
