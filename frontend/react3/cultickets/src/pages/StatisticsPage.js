@@ -14,7 +14,20 @@ export const StatisticsPage = () => {
         Authorization: `Bearer ${token}`,
       });
       setGenre(fetched.info);
-      setStats(fetched.exps);
+      let exp = fetched.exps;
+
+      exp.sort((a, b) => {
+        if (parseInt(a.month) > parseInt(b.month)) {
+          return 1;
+        }
+        if (parseInt(a.month) < parseInt(b.month)) {
+          return -1;
+        }
+        // a должно быть равным b
+        return 0;
+      });
+      console.log("sorted", exp);
+      setStats(exp);
       console.log("Stats", genre, stats);
     } catch (e) {}
   }, [request, token, setGenre, setStats, userId]);
@@ -23,7 +36,6 @@ export const StatisticsPage = () => {
     fetchShows();
   }, [fetchShows]);
   if (!stats || stats.length == 0) {
-    console.log("HERE");
     return <div> No information about this user</div>;
   }
   const data = stats.map((e) => {
