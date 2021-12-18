@@ -8,16 +8,19 @@ import { Checkbox } from "../components/Checkbox";
 export const ShowPage = () => {
   const [shows, setShows] = useState([]);
   const [theatres, setTheatres] = useState([]);
+  const [genres, setGenres] = useState([]);
   const [theatre, setTheatre] = useState({ id: 0, name: "" });
+  const [genre, setGenre] = useState({ id: 0, name: "" });
   const { token, userId } = useContext(AuthContext);
   const { loading, request } = useHttp();
 
   const fetchAllTheatres = useCallback(async () => {
     try {
-      const fetched = await request(`/shows/theatres`, "GET", null, {
+      const fetched = await request(`/shows/filters`, "GET", null, {
         Authorization: `Bearer ${token}`,
       });
       setTheatres(fetched.theatres);
+      setGenres(fetched.genres);
     } catch (e) {}
   }, [request, token, setTheatres]);
 
@@ -52,9 +55,7 @@ export const ShowPage = () => {
   const fetchTheatreShows = useCallback(
     async (e) => {
       try {
-        console.log(e);
         const { name, value } = e.target;
-        console.log("NAme, value", name, value);
         setTheatre({ id: value, name });
         const fetched = await request(
           `/shows/userId=0&theatreId=${value}&genreId=0`,
@@ -64,9 +65,26 @@ export const ShowPage = () => {
             Authorization: `Bearer ${token}`,
           }
         );
-
         setShows(fetched.shows);
-        console.log("In theatre show", shows);
+      } catch (e) {}
+    },
+    [request, token, setShows, userId]
+  );
+
+  const fetchGenreShows = useCallback(
+    async (e) => {
+      try {
+        const { name, value } = e.target;
+        setGenre({ id: value, name });
+        const fetched = await request(
+          `/shows/userId=0&theatreId=0&genreId=${value}`,
+          "GET",
+          null,
+          {
+            Authorization: `Bearer ${token}`,
+          }
+        );
+        setShows(fetched.shows);
       } catch (e) {}
     },
     [request, token, setShows, userId]
@@ -80,10 +98,13 @@ export const ShowPage = () => {
   console.log("theatres", theatres);
   console.log("shows", shows);
   let theatresList;
-  if (!theatres) {
-    theatresList = <div>No theatres</div>;
-  } else {
+  if (theatres) {
     theatresList = theatres.map((e) => <option value={e.id}>{e.name}</option>);
+  }
+  let genresList;
+  console.log(genres);
+  if (genres) {
+    genresList = genres.map((e) => <option value={e.id}>{e.name}</option>);
   }
 
   let showsList;
@@ -120,15 +141,30 @@ export const ShowPage = () => {
   }
   return (
     <>
-      <select
-        name="theatres"
-        onChange={fetchTheatreShows}
-        className="form-control"
-        value={theatre.id}
-      >
-        {theatresList}
-      </select>
-
+      {theatresList ? (
+        <select
+          name="theatres"
+          onChange={fetchTheatreShows}
+          className="form-control"
+          value={theatre.id}
+        >
+          {theatresList}
+        </select>
+      ) : (
+        <></>
+      )}
+      {genresList ? (
+        <select
+          name="genres"
+          onChange={fetchGenreShows}
+          className="form-control"
+          value={genre.id}
+        >
+          {genresList}
+        </select>
+      ) : (
+        <></>
+      )}
       <Checkbox>{{ fetchAllShows, fetchSuitableShows }}</Checkbox>
       {showsList}
     </>
