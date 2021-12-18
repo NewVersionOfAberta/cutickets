@@ -91,14 +91,14 @@ public class TicketRepository  {
                         "sh.sh_name, sh.sh_description from sold_ticket as st " +
                         "left join ticket as t on t.t_id = st.st_ticket_id " +
                         "left join scheduled_show as ss on ss.ss_id = t.t_scheduled_show_id " +
-                        "left join show as sh on sh.sh_scheduled_show_id = ss.ss_id " +
+                        "left join show as sh on sh.sh_id = ss.ss_show_id " +
                         "left join ticket_status as ts on ts.ts_id = t.t_ticket_status_id " +
                         "left join seat as se on se.se_id = t.t_seat_id " +
                         "left join sector as sec on sec.sec_id = se.se_sector_id " +
                         "left join hall as h on h.h_id = sec.sec_hall_id " +
                         "left join theatre as th on th.t_id = h.h_theatre_id " +
                         "left join user as u on u.u_id = st.st_user_id " +
-                        "where u.u_id = ?;");
+                        "where u.u_id = ?");
         preparedStatement.setInt(1, userId);
         ResultSet resultSet = preparedStatement.executeQuery();
         List<Ticket> tickets = new ArrayList<>();
