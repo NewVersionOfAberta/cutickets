@@ -87,9 +87,11 @@ public class TicketRepository  {
         Connection connection = config.getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement(
                 "select t.t_id, t.t_price, ts.ts_name, se.se_number, se.se_row, " +
-                        "sec.sec_name, h.h_name, th.t_name, ss.ss_time from sold_ticket as st " +
+                        "sec.sec_name, h.h_name, th.t_name, ss.ss_time, " +
+                        "sh.sh_name, sh.sh_description from sold_ticket as st " +
                         "left join ticket as t on t.t_id = st.st_ticket_id " +
                         "left join scheduled_show as ss on ss.ss_id = t.t_scheduled_show_id " +
+                        "left join show as sh on sh.sh_scheduled_show_id = ss.ss_id " +
                         "left join ticket_status as ts on ts.ts_id = t.t_ticket_status_id " +
                         "left join seat as se on se.se_id = t.t_seat_id " +
                         "left join sector as sec on sec.sec_id = se.se_sector_id " +
@@ -120,6 +122,8 @@ public class TicketRepository  {
             LocalDateTime datetime = resultSet.getTimestamp("ss_time").toLocalDateTime();
             String[] dts = datetime.toString().split("T");
             show.setDatetime(dts[0] + " " + dts[1]);
+            show.setName(resultSet.getString("sh.sh_name"));
+            show.setDescription(resultSet.getString("sh.sh_description"));
             ticket.setSeat(seat);
             ticket.setTheaterHall(hall);
             ticket.setSector(sector);
