@@ -268,19 +268,4 @@ public class ShowRepository {
         return showList;
     }
 
-
-//    List<Show> findByTheater(Theater theater);
-//
-//    List<Show> findByShowType(ShowType showType);
-//
-//    List<Show> findByTheaterAndShowType(Theater theater, ShowType type);
-//
-//    @Modifying
-//    @Transactional
-//    @Query(value = "update Show as s set s.name = :name, s.description = :description\n" +
-//            "where s.id = :show_id")
-//    int updateShow(@Param("show_id") int showId,
-//                   @Param("name") String name,
-//                   @Param("description") String description);
-
 }
