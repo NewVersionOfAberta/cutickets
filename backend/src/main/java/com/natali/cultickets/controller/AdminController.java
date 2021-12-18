@@ -1,5 +1,6 @@
 package com.natali.cultickets.controller;
 
+import com.natali.cultickets.dto.JournalDto;
 import com.natali.cultickets.dto.ShowDto;
 import com.natali.cultickets.dto.UserDto;
 import com.natali.cultickets.model.AuthInfo;
@@ -113,6 +114,26 @@ public class AdminController {
         } catch (Exception e) {
             responseEntity = new ResponseEntity<>("Failed to delete show.", HttpStatus.INTERNAL_SERVER_ERROR);
             log.error("Failed to delete show", e);
+        }
+        return responseEntity;
+    }
+
+    @GetMapping("/journal")
+    ResponseEntity<Map<String, Object>> getJournalInfo(Principal principal) {
+        String login = principal.getName();
+        AuthInfo authInfo = userService.findByLogin(login);
+        int userId = authInfo.getUserId();
+
+        ResponseEntity<Map<String, Object>> responseEntity;
+        Map<String, Object> responseData = new HashMap<>();
+        try {
+            List<JournalDto> journalInfo = this.userService.getJournalInfo(userId);
+            responseData.put("journalInfo", journalInfo);
+            responseEntity = new ResponseEntity<>(responseData, HttpStatus.OK);
+        } catch (Exception e) {
+            responseData.put("message", "Failed to get suitable shows.");
+            responseEntity = new ResponseEntity<>(responseData, HttpStatus.INTERNAL_SERVER_ERROR);
+            log.error("Failed to get suitable shows", e);
         }
         return responseEntity;
     }

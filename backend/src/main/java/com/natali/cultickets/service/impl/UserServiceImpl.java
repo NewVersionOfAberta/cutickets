@@ -2,9 +2,11 @@ package com.natali.cultickets.service.impl;
 
 import com.natali.cultickets.dto.ExpensesDto;
 import com.natali.cultickets.dto.GenreDto;
+import com.natali.cultickets.dto.JournalDto;
 import com.natali.cultickets.dto.UserDto;
 import com.natali.cultickets.mapstruct.ExpensesMapper;
 import com.natali.cultickets.mapstruct.GenreMapper;
+import com.natali.cultickets.mapstruct.JournalMapper;
 import com.natali.cultickets.mapstruct.UserMapper;
 import com.natali.cultickets.model.AuthInfo;
 import com.natali.cultickets.model.Genre;
@@ -32,6 +34,7 @@ public class UserServiceImpl implements UserService {
     private final GenreMapper genreMapper;
     private final ExpensesMapper expensesMapper;
     private final JournalRepository journalRepository;
+    private final JournalMapper journalMapper;
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository,
@@ -39,7 +42,8 @@ public class UserServiceImpl implements UserService {
                            UserMapper mapstructMapper,
                            GenreMapper genreMapper,
                            ExpensesMapper expensesMapper,
-                           JournalRepository journalRepository) {
+                           JournalRepository journalRepository,
+                           JournalMapper journalMapper) {
         this.userRepository = userRepository;
 //        this.roleRepository = roleRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
@@ -47,6 +51,7 @@ public class UserServiceImpl implements UserService {
         this.genreMapper = genreMapper;
         this.expensesMapper = expensesMapper;
         this.journalRepository = journalRepository;
+        this.journalMapper = journalMapper;
     }
 
     @Override
@@ -141,6 +146,12 @@ public class UserServiceImpl implements UserService {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public List<JournalDto> getJournalInfo(int userId) {
+        return journalRepository.getJournalInfo().stream()
+                .map(this.journalMapper::journalToJournalDto)
+                .collect(Collectors.toList());
     }
 
 

@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Journal {
     private int id;
-    private int userId;
+    private String login;
     private String userName;
     private String time;
     private String table;

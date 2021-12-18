@@ -172,8 +172,7 @@ public class ShowServiceImpl implements ShowService {
     }
 
     public List<ShowDto> findByGenre(int genreId) {
-        Genre genre = this.genreService.findShowType(genreId)
-                .orElseThrow(() -> new ServiceException("Cannot find show type with provided id"));
+        Genre genre = this.genreService.findById(genreId);
         List<Show> showsByType = null;
         try {
             showsByType = this.showRepository.findByGenre(genreId);
