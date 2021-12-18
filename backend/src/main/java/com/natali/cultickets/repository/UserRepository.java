@@ -99,12 +99,13 @@ public class UserRepository {
         PreparedStatement preparedStatement = null;
         try {
             preparedStatement = connection.prepareStatement(
-                    "select c.c_id from city as c " +
-                            "join address as ad on ad.add_city_id = c.c_id " +
-                            "join user as u on u.u_address_id = ad.add_id " +
+                    "select c.c_id from user as u " +
+                            "join personal_data as pd on pd.pd_id = u.u_personal_data_id " +
+                            "join city as c on c.c_id = pd.pd_city_id " +
                             "where u.u_id = ?");
             preparedStatement.setInt(1, userId);
             ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.next();
             return resultSet.getInt("c_id");
         } catch (SQLException e) {
             e.printStackTrace();
