@@ -2,6 +2,7 @@ package com.natali.cultickets.controller;
 
 //import com.natali.cultickets.service.impl.ShowServiceImpl;
 
+import com.natali.cultickets.dto.GenreDto;
 import com.natali.cultickets.dto.ShowDto;
 import com.natali.cultickets.dto.TheatreDto;
 import com.natali.cultickets.model.AuthInfo;
@@ -125,7 +126,7 @@ public class ShowsController {
         return responseEntity;
     }
 
-    @GetMapping("/theatres")
+    @GetMapping("/filters")
     ResponseEntity<Map<String, Object>> getTheatres(Principal principal) {
         String login = principal.getName();
         AuthInfo authInfo = userService.findByLogin(login);
@@ -135,7 +136,9 @@ public class ShowsController {
         Map<String, Object> responseData = new HashMap<>();
         try {
             List<TheatreDto> theatres = this.theatreService.findAll(user_id);
+            List<GenreDto> genres = this.genreService.findAll(user_id);
             responseData.put("theatres", theatres);
+            responseData.put("genres", genres);
             responseEntity = new ResponseEntity<>(responseData, HttpStatus.OK);
         } catch (Exception e) {
             responseData.put("message", "Failed to get suitable shows.");

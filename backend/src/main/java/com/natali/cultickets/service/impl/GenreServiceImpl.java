@@ -39,10 +39,9 @@ public class GenreServiceImpl implements GenreService {
     }
 
     @Override
-    public List<GenreDto> findAll() {
+    public List<GenreDto> findAll(int userId) {
         List<Genre> showTypes = this.genreRepository.findAll();
-//        userDetailsService.
-//        journalRepository.write(, "genre", null, null, JournalRepository.Operation.READ);
+        journalRepository.write(userId, "genre", null, null, JournalRepository.Operation.READ);
         return showTypes.stream()
                 .map(this.utilsMapper::genreToGenreDto)
                 .collect(Collectors.toList());
