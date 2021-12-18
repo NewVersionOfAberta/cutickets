@@ -91,7 +91,7 @@ public class TicketRepository  {
                         "sh.sh_name, sh.sh_description from sold_ticket as st " +
                         "left join ticket as t on t.t_id = st.st_ticket_id " +
                         "left join scheduled_show as ss on ss.ss_id = t.t_scheduled_show_id " +
-                        "left join show as sh on sh.sh_id = ss.ss_show_id " +
+                        "left join `show` as sh on sh.sh_id = ss.ss_show_id " +
                         "left join ticket_status as ts on ts.ts_id = t.t_ticket_status_id " +
                         "left join seat as se on se.se_id = t.t_seat_id " +
                         "left join sector as sec on sec.sec_id = se.se_sector_id " +
