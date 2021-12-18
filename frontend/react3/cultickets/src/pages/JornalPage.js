@@ -9,10 +9,10 @@ export const JornalPage = () => {
 
   const fetchJornal = useCallback(async () => {
     try {
-      const fetched = await request(`/admin/jornal`, "GET", null, {
+      const fetched = await request(`/admin/journal`, "GET", null, {
         Authorization: `Bearer ${token}`,
       });
-      setJornal(fetched.jornal);
+      setJornal(fetched.journalInfo);
     } catch (e) {}
   }, [request, token, setJornal]);
 
@@ -21,28 +21,31 @@ export const JornalPage = () => {
   }, [fetchJornal]);
 
   return jornal && jornal.length ? (
-    <table>
-      <tr>
-        <td>Login</td>
-        <td>Action</td>
-        <td>Table</td>
-        <td>Value</td>
-        <td>Column</td>
-        <td>Time</td>
-      </tr>
-
-      {jornal.map((e) => (
+    <table className="table table-striped">
+      <thead className="thead-dark">
         <tr>
-          <td>{e.login}</td>
-          <td>{e.action}</td>
-          <td>{e.table}</td>
-          <td>{e.value}</td>
-          <td>{e.column}</td>
-          <td>{e.time}</td>
+          <th scope="col">Login</th>
+          <th scope="col">Action</th>
+          <th scope="col">Table</th>
+          <th scope="col">Value</th>
+          <th scope="col">Column</th>
+          <th scope="col">Time</th>
         </tr>
-      ))}
+      </thead>
+      <tbody>
+        {jornal.map((e) => (
+          <tr>
+            <td>{e.login}</td>
+            <td>{e.operation}</td>
+            <td>{e.table}</td>
+            <td>{e.value}</td>
+            <td>{e.column}</td>
+            <td>{e.time}</td>
+          </tr>
+        ))}
+      </tbody>
     </table>
   ) : (
-    <div>Operation jornal is empty</div>
+    <div>Operation journal is empty</div>
   );
 };

@@ -63,8 +63,8 @@ export const AdminPage = () => {
   ));
   return (
     <>
-      <NavLink className="btn btn-info mb-3" to="/jornal">
-        View Jornal
+      <NavLink className="btn btn-info mb-3" to="/journal">
+        View Journal
       </NavLink>
       {userList}
     </>

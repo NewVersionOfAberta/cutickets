@@ -161,7 +161,7 @@ public class ShowRepository {
                         "join theatre as t on t.t_id = sh.sh_theatre_id " +
                         "join address as ad on ad.add_id = t.t_address_id " +
                         "join city as c on c.c_id = ad.add_city_id " +
-                        "join mtm_show_genre as mtm on mtm.mtm_show_id = sh.sh_id" +
+                        "join mtm_show_genre as mtm on mtm.mtm_show_id = sh.sh_id " +
                         "where mtm.mtm_genre_id = ?");
         preparedStatement.setInt(1, id);
         ResultSet resultSet = preparedStatement.executeQuery();

@@ -26,7 +26,7 @@ export const useRoutes = (isAuthentificated, roles) => {
           <Route path="/profile" exact element={<Profile />}></Route>
           <Route path="/statistics" exact element={<StatisticsPage />}></Route>
           <Route path="/admin" exact element={<AdminPage />}></Route>
-          <Route path="/jornal" exact element={<JornalPage />}></Route>
+          <Route path="/journal" exact element={<JornalPage />}></Route>
           {/* <Navigate to={"/shows"} /> */}
         </Routes>
       );
