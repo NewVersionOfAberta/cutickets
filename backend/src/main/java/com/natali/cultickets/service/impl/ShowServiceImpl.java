@@ -171,17 +171,6 @@ public class ShowServiceImpl implements ShowService {
                 .collect(Collectors.toList());
     }
 
-
-//
-//    private List<ShowDto> getShowsByTheater(int theaterId) {
-//        Theater theater = this.theaterService.findTheater(theaterId)
-//                .orElseThrow(() -> new ServiceException("Cannot find theater with provided id"));
-//        List<Show> showsByTheater = this.showRepository.findByTheater(theater);
-//        return showsByTheater.stream()
-//                .map(this.showMapper::showToShowDto)
-//                .collect(Collectors.toList());
-//    }
-//
     public List<ShowDto> findByGenre(int genreId) {
         Genre genre = this.genreService.findShowType(genreId)
                 .orElseThrow(() -> new ServiceException("Cannot find show type with provided id"));
