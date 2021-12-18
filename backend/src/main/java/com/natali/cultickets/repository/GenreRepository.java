@@ -43,6 +43,7 @@ public class GenreRepository {
         preparedStatement.setInt(1, genreId);
         ResultSet resultSet = preparedStatement.executeQuery();
         Genre genre = new Genre();
+        resultSet.next();
         genre.setId(resultSet.getInt("g_id"));
         genre.setName(resultSet.getString("g_name"));
         resultSet.close();
