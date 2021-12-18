@@ -21,13 +21,14 @@ public class GenreRepository {
     public List<Genre> findAll() throws SQLException {
         Connection connection = config.getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement(
-                "select g_name from genre;");
+                "select g_id, g_name from genre;");
         ResultSet resultSet = preparedStatement.executeQuery();
 
         List<Genre> genres = new ArrayList<>();
 
         while (resultSet.next()) {
             Genre genre = new Genre();
+            genre.setId(resultSet.getInt("g_id"));
             genre.setName(resultSet.getString("g_name"));
             genres.add(genre);
         }
